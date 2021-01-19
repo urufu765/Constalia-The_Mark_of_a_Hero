@@ -1,6 +1,6 @@
 """
 Constalia: The Mark of a Hero
-Game by Jason [Urufu2000]
+Game by [URUFU765]
 """
 from typing import Dict, List
 import resources.graphics as graphics
