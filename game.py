@@ -3,18 +3,18 @@ Constalia: The Mark of a Hero
 Game by [URUFU765]
 """
 from typing import Dict, List
-import resources.graphics as graphics
-import assets.texts as t
-from resources.global_dic import controls as c
-from resources.global_dic import variables as DV
-from resources.global_dic import solids as solid_dic
-from resources.global_dic import map_class as mapz
-from resources import saveloadmaster as saving
-import resources.player as p
-from os import mkdir, path
-import resources.eventulate as e
-from chars import Firay
-import msvcrt
+import resources.graphics as graphics  # Graphics
+import assets.texts as t  # Text
+from resources.global_dic import controls as c  # Controls
+from resources.global_dic import variables as DV  # Global variables
+from resources.global_dic import solids as solid_dic  # Solid codes
+from resources.global_dic import map_class as mapz  # Map data
+from resources import saveloadmaster as saving  # Saving files
+import resources.player as p  # Player
+from os import mkdir, path  # Saving
+import resources.eventulate as e  # Event manager
+from chars import Firay  # Firay text
+import msvcrt  # For convenient control purposes
 ''' For troubleshooting only
 import sys
 def show_exception_and_exit(exc_type, exc_value, tb):
