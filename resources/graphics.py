@@ -1,3 +1,6 @@
+"""
+The graphics engine for this game.
+"""
 from typing import List
 from resources.global_dic import map_class as mapz
 from resources.global_dic import visuals as visual_dic
@@ -8,12 +11,14 @@ from resources import player as p
 def main_graphics_engine(map: int, position: List[int]) -> None:
     """
     Prints a 7x7 grid map with the player as the center.
+    The 7x7 grid is inflated to 21x21 for viewing convenience.
     >>> main_graphics_engine(0, [6, 11])
     >>> main_graphics_engine(1, [5, 9])
     >>> main_graphics_engine(2, [10, 2])
     """
     m = mapz[map]
     View = []
+    # Graphics generator
     for x in range(-3, 4):
         temp = []
         for y in range(-3, 4):
@@ -23,6 +28,8 @@ def main_graphics_engine(map: int, position: List[int]) -> None:
             except IndexError:
                 temp.append(visual_dic['outtaboundz'])
         View.append(temp)
+
+    # Graphics printer
     print("\n╭─────────────────────╌╴╴"
           "\n│ Current location: {49}"
           "\n╰─────────────────────╌╴╴"
@@ -78,6 +85,6 @@ def main_graphics_engine(map: int, position: List[int]) -> None:
                   p.Stamina.max_stamina))
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # For testing purposes
     import doctest
     doctest.testmod(verbose=True)

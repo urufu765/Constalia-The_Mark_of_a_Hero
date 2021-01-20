@@ -35,15 +35,15 @@ def startup_folder_creations() -> None:
         mkdir(path.expanduser('~\\Documents\\TMoaH'))
         if path.exists(path.expanduser('~\\Documents\\TMoaH')):
             mkdir(path.expanduser('~\\Documents\\TMoaH\\saves'))
-            return
+            return  # return if folder has been created successfully in docs
         mkdir(path.expanduser('~\\Downloads\\TMoaH'))
         if path.exists(path.expanduser('~\\Downloads\\TMoaH')):
             mkdir(path.expanduser('~\\Downloads\\TMoaH\\saves'))
-            return
+            return  # return if folder has been created successfully in dls
         mkdir(path.expanduser('~\\TMoaH'))
         mkdir(path.expanduser('~\\TMoaH\\saves'))
     except FileExistsError:
-        return
+        return  # if the directory already exists
     except Exception:
         input("Unknown error has occured! Please contact developer!")
 
@@ -68,7 +68,8 @@ def control_chooser() -> Dict[str, List[str]]:
 
 def successful_move() -> None:
     """
-    Function that runs the needed stuff when successful action
+    Function that runs the needed stuff when successful action.
+    This function may move to a different file.
     """
     print(t.action_text.valid_action)
     DV['stamina'] -= 1
@@ -77,6 +78,7 @@ def successful_move() -> None:
 def player_exhausted() -> None:
     """
     prints message when exhausted
+    This function may move to a different file.
     """
     print(Firay.expressions.e004)
     print(Firay.talking.t000)
@@ -117,10 +119,10 @@ def event_manager(y: int, x: int) -> bool:
 
 # Game
 if __name__ == '__main__':
-    # startup_folder_creations()
+    startup_folder_creations()
     input(t.system_text.text)
     print("\n"*10)
-    play_control = control_chooser()
+    play_control = control_chooser()  # prompts player to choose controls
     while True:
         graphics.main_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
         play_move = ''
@@ -140,6 +142,7 @@ if __name__ == '__main__':
                     print("{0}: {1}".format(opti, play_control[opti]))
 
         # output of game based on input
+        # Direction output start
         temp_id = DV['m_id']
         if play_move in play_control['Up']:
             if not event_manager(DV['Y'] - 1, DV['X']):
@@ -157,6 +160,7 @@ if __name__ == '__main__':
             if not event_manager(DV['Y'], DV['X'] + 1):
                 DV['X'] += 1
                 print(t.action_text.move_action)
+        # Direction output end
         elif play_move in play_control['Save']:
             saving.save_game()
         elif play_move in play_control['Load']:

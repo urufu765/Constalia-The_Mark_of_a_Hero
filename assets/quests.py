@@ -1,3 +1,6 @@
+"""
+Contains quests
+"""
 '''
 Inactive: Quest not activated
 Active: Quest currently active
@@ -9,3 +12,9 @@ Locked: Quest not doable
 
 class get_clear_leaf:
     quest_type = "Main"
+
+
+# Lookup table
+QUEST_TABLE = {
+    'get_leaf': get_clear_leaf
+}

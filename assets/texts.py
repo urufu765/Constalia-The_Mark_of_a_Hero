@@ -1,3 +1,8 @@
+"""
+The main source for most of the texts all gathered here
+"""
+
+
 class action_text:
     invalid_action = ""
     invalid_input = "Invalid input!"

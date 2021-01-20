@@ -1,3 +1,6 @@
+"""
+Event handler. Handle with care.
+"""
 import msvcrt
 from resources.global_dic import variables as DV
 from resources.global_dic import doors
@@ -11,7 +14,7 @@ import chars.Ravia as Ravia
 
 def false_check(y: int, x: int) -> None:
     """
-    Just prints, is all.
+    Just prints, is all. For checks that don't need anything to be done.
     """
     print(t.action_text.run_into_solid)
 
@@ -22,7 +25,7 @@ def door_check(y: int, x: int) -> None:
     """
     try:
         dest = doors['{}-{}-{}'.format(DV['m_id'], y, x)]
-        if not dest[1]:
+        if not dest[1]:  # if unlocked
             DV['m_id'], DV['Y'], DV['X'] = dest[2], dest[3], dest[4]
         else:
             apply_interactions.door(dest[0])
@@ -37,7 +40,7 @@ def bed_check(y: int, x: int) -> None:
     """
     try:
         bed = i['{}-{}-{}'.format(DV['m_id'], y, x)]
-        if bed[2]:
+        if bed[2]:  # if interactable(don't put true for NPC's!)
             apply_interactions.bed(bed[0])
             print(t.action_text.ask_sleeping)
             userin = msvcrt.getch().decode("utf-8")
@@ -79,7 +82,7 @@ def char_check(y: int, x: int) -> None:
     try:
         characs = i['{}-{}-{}'.format(DV['m_id'], y, x)]
         if characs[2]:  # for something, haven't decided
-            pass
+            pass  # maybe recruitable?
         else:
             apply_interactions.character(characs[0])
     except KeyError:
@@ -107,9 +110,9 @@ def water_check(y: int, x: int) -> None:
     apply_interactions.water('')
 
 
-class apply_interactions:
+class apply_interactions:  # All for outputting text
     def door(id: str) -> None:
-        pass
+        pass  # unused for now. Sentient door when?
 
     def bed(id: str) -> None:
         if id == 'firay_bed':
@@ -120,7 +123,7 @@ class apply_interactions:
             input(interacting.i002)
             print(expressions.e002)
             input(interacting.i003)
-        else:
+        else:  # Typical bed interaction
             print(expressions.e000)
             input(interacting.i011)
 
@@ -132,7 +135,7 @@ class apply_interactions:
             input(interacting.i005)
             print(expressions.e003)
             input(interacting.i006)
-        else:
+        else:  # Typical table interaction
             print(expressions.e000)
             input(interacting.i010)
 
@@ -174,10 +177,11 @@ class apply_interactions:
             print(t.placeholder.placeholder_sign)
         elif id == 'mith_direction':
             print(t.placeholder.placeholder_sign)
-        else:
+        else:  # Typical sign interaction
             print(t.placeholder.placeholder_sign)
 
     def water(id: str) -> None:
+        # Generic water interaction for now. No, there's no witches.
         print(expressions.e000)
         input(interacting.i007)
         print(expressions.e002)

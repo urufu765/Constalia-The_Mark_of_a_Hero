@@ -1,3 +1,8 @@
+"""
+Contains maps
+"""
+
+
 class Mithavil:
     map_id = 0
     map_name = "North Mithavil"

@@ -1,3 +1,6 @@
+"""
+For saving and loading.
+"""
 from typing import List
 from resources.global_dic import variables as DV
 from resources.global_dic import doors as DD
@@ -65,16 +68,16 @@ def save_game() -> None:
     destination = get_resource_path('saves\\save_{}'.format(desired_num))
     # destination = 'saves\\save_{}'.format(desired_num)  # legacy
     with open(destination, 'w') as file:
-        for x in DV:
+        for x in DV:  # Global dictionary
             file.write(x + ';' + str(DV[x]) + '\n')
         file.write("END\n")
-        for d in DD:
+        for d in DD:  # Door dictionary
             file.write(d + ';' + str(DD[d]) + '\n')
         file.write("END\n")
-        for i in DI:
+        for i in DI:  # Item dictionary
             file.write(i + ';' + str(DI[i]) + '\n')
         file.write("END\n")
-        for q in DQ:
+        for q in DQ:  # Quest dictionary
             file.write(q + ';' + str(DQ[q]) + '\n')
         file.write("END\n")
     print("Successfully saved to save_{}".format(desired_num))
@@ -108,7 +111,7 @@ def load_game() -> None:
             for w in location_index:
                 while w == modes[num]:
                     x = file.readline()
-                    if x.strip('\n') == 'END':
+                    if x.strip('\n') == 'END':  # mode changer
                         num += 1
                     else:
                         y = x.split(';')
@@ -121,4 +124,4 @@ def load_game() -> None:
                             location_index[w][y[0]] = z
         print("Successfully loaded save from save_{}".format(desired_num))
     except IOError:
-        print("Error in loading file")
+        print("Error loading file")

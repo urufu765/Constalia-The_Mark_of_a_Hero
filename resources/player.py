@@ -1,3 +1,8 @@
+"""
+Everything that concerns with the player.
+"""
+
+
 class Stamina:
     max_stamina = 20
 

@@ -5,6 +5,7 @@ from assets import maps as m
 from resources.player import Stamina as s
 from assets import quests as q
 
+# Global dictionary!
 variables = {
     'Y': 5,
     'X': 9,
@@ -12,23 +13,27 @@ variables = {
     'stamina': s.max_stamina
     }
 
+# Collision codes
 solids = {
     'Mithavil': [2, 3, 5, 6, 7, 8, 9],
     'Mithavil Interior': [1, 2, 3, 4, 5, 8, 9]
     }
 
+# Map class lookup table
 map_class = {
     0: m.Mithavil,
     1: m.Home,
     2: m.Raviahouse
     }
 
+# Generating graphics
 visuals = {
     'outtaboundz': "▒",
     'Mithavil': [' ', '҈', '■', '⌠', '▓', 'ﬕ', '‼', '□', 'Ξ', '█'],
     'Mithavil Interior': ['░', 'C', '▒', '╬', '┃', '━', '│', '─', 'Ξ', '█']
     }
 
+# Every single door in the game that's noteworthy
 doors = {
     # 'Map ID-Y-X': [Door ID, Door locked check, Map class, Y, X]
     # Mithavil doors
@@ -49,6 +54,7 @@ doors = {
     '2-4-5': ['2_bedroom', True, 2, 5, 5]
 }
 
+# Every single interactable that can be seen in the game
 interactables = {
     # 'Map ID-Y-X': [Interactable ID, Type, Trigger]
     # Mithavil(0)
@@ -93,14 +99,16 @@ interactables = {
     '2-6-7': ['ravia', 'npc', False]
 }
 
+# Quests, for loading saves and stuff
 quests = {
-    # [type, status, class]
+    # [type(may be replaced with something else later), status]
     'get_leaf': ['main', 'Inactive']
 }
 
 
 # control schemes
 class controls:
+    # Use null as a template
     control_null = {
         'Up': [],
         'Down': [],
@@ -113,6 +121,7 @@ class controls:
         'Quit': ["P", "p"]
     }
 
+    # For the general public
     control_wasd = {
         'Up': ["W", "w"],
         'Down': ["S", "s"],
@@ -125,6 +134,7 @@ class controls:
         'Quit': ["P", "p"]
     }
 
+    # For those who want it
     control_nesw = {
         'Up': ["N", "n"],
         'Down': ["S", "s"],
@@ -137,18 +147,20 @@ class controls:
         'Quit': ["P", "p"]
     }
 
+    # For those who want to use this
     control_nump = {
         'Up': ["8"],
         'Down': ["2", "5"],
         'Left': ["4"],
         'Right': ["6"],
-        'Quest': ["*"],
-        'Inventory': ["/"],
+        'Quest': ["7"],
+        'Inventory': ["9"],
         'Save': ["+"],
         'Load': ["-"],
-        'Quit': ["P", "p"]
+        'Quit': ["*"]
     }
 
+    # For the questionable
     control_udlr = {
         'Up': ["U", "u"],
         'Down': ["D", "d"],
@@ -161,6 +173,7 @@ class controls:
         'Quit': ["P", "p"]
     }
 
+    # Lookup table
     control_schemes = {
         1: control_nesw,
         2: control_udlr,

@@ -1,3 +1,6 @@
+"""
+Items.
+"""
 '''
 1 = Weapon
 2 = Consumable
