@@ -5,6 +5,7 @@ import msvcrt
 from resources.global_dic import variables as DV
 from resources.global_dic import doors
 from resources.global_dic import interactables as i
+from assets.quests import run_quest
 from resources.player import *
 import assets.texts as t
 from chars.Firay import *
@@ -81,8 +82,9 @@ def char_check(y: int, x: int) -> None:
     """
     try:
         characs = i['{}-{}-{}'.format(DV['m_id'], y, x)]
-        if characs[2]:  # for something, haven't decided
-            pass  # maybe recruitable?
+        if characs[2]:  # has something to say aka quest
+            if not run_quest(characs[0]):
+                apply_interactions.character(characs[0])
         else:
             apply_interactions.character(characs[0])
     except KeyError:
@@ -139,7 +141,7 @@ class apply_interactions:  # All for outputting text
             print(expressions.e000)
             input(interacting.i010)
 
-    def character(id: str) -> None:
+    def character(id: str) -> None:  # all typical interactions
         if id == 'john':
             print(expressions.e000)
             input(talking.t010)

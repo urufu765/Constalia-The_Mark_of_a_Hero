@@ -3,7 +3,6 @@ Contains everything regarding variables
 """
 from assets import maps as m
 from resources.player import Stamina as s
-from assets import quests as q
 
 # Global dictionary!
 variables = {
@@ -78,7 +77,7 @@ interactables = {
     '1-10-5': ['home_table', 'table', False],
     '1-10-6': ['home_table', 'table', False],
     # Characters
-    '1-9-7': ['rubi', 'npc', False],
+    '1-9-7': ['rubi', 'npc', True],
     '1-11-8': ['john', 'ally', False],
     # Ravia's house(2)
     # Table
@@ -101,8 +100,8 @@ interactables = {
 
 # Quests, for loading saves and stuff
 quests = {
-    # [type(may be replaced with something else later), status]
-    'get_leaf': ['main', 'Inactive']
+    # [step, status, [other assets for quest(string ONLY!)]]
+    'get_leaf': [0, 'Inactive', ['n', 'n']]
 }
 
 

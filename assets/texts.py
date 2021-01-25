@@ -61,6 +61,7 @@ class system_text:
 
 class quest_text:
     quest_fin = "You completed '{}'"  # add name
+    quest_accept = "Accept quest?[y/n]"
     quest_Start = (
         "You got a new quest! You can view your quest log by pressing {}!"
         # add key layout in main program
