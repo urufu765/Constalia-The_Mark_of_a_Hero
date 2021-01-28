@@ -19,6 +19,9 @@ Locked: Quest not doable(yet/anymore)
 '''
 
 
+Nyafim = False
+
+
 class quests:
     """
     A quest object meant to store each quest as an object when accessed.
@@ -49,6 +52,8 @@ class quests:
         """
         May not be used.
         """
+        if Nyafim:
+            print("<quests: active_quest triggered>")
         self.q_update()
         quest_steps[self.step](inter_id)
 
@@ -56,11 +61,15 @@ class quests:
         """
         Progresses the quest
         """
+        if Nyafim:
+            print("<quests: progress_quest triggered>")
         try:
             self.step += 1
             self.q_update()
             quest_steps[self.step](inter_id)
         except KeyError:
+            if Nyafim:
+                print("<quests: progress_quest KeyError triggered>")
             self.quest_status = 'Complete'
             self.q_update()
 
@@ -108,12 +117,16 @@ class get_clear_leaf(quests):
         """
         Used mostly for updating quest during steps
         """
+        if Nyafim:
+            print("<get_clear_leaf: cont_quest triggered>")
         self.quest_steps[self.step](inter_id)
 
     def q_update(self):
         """
         Updates quest status in quest dictionary
         """
+        if Nyafim:
+            print("<get_clear_leaf: q_update triggered>")
         DQ[self.quest_id][0] = self.step
         DQ[self.quest_id][1] = self.quest_status
         DQ[self.quest_id][2][0] = self.talked_ravia
@@ -124,6 +137,8 @@ class get_clear_leaf(quests):
         Getting the quest from Rubi
         """
         if self.sanity_check:
+            if Nyafim:
+                print("<get_clear_leaf: Sanity check cleared>")
             # Asking Firay to do a damn fetch quest
             # Main Dialogue Start
             print(Rubi.expressions.e000)
@@ -142,6 +157,8 @@ class get_clear_leaf(quests):
             player_in = input(t.quest_text.quest_accept)
             if player_in.lower() == 'y':
                 # Accepting the damn fetch quest
+                if Nyafim:
+                    print("<get_clear_leaf: Firay Accepts Quest>")
                 print(Firay.expressions.e000)
                 input(Firay.talking.t003)  # may split the text up
                 # print(t.quest_text.quest_Start) (not implemented yet)
@@ -150,15 +167,19 @@ class get_clear_leaf(quests):
                 self.progress_quest(self.quest_steps, inter_id)
             else:
                 # Declining the damn fetch quest
-                pass  # Add dialogue for this
+                # Add dialogue for this
+                if Nyafim:
+                    print("<get_clear_leaf: Firay Declines Quest>")
         else:  # This should never happen.
             print("Error! Error?! Error at get_quest_rubi! AaaA!")
+        self.q_update()
 
     def get_leaf_ravia(self, inter_id: str) -> None:
         """
         Getting the leaf from Ravia
         """
-        print("Quest successfully bridged")
+        if Nyafim:
+            print("<get_clear_leaf: Quest successfully bridged to stage 1>")
         if self.quest_status == 'Active':
             if inter_id == 'rubi' and self.talked_rubi == 'on the way':
                 # Debrief on the location of said item
@@ -175,12 +196,16 @@ class get_clear_leaf(quests):
             elif inter_id == 'rubi' and self.talked_rubi == 'not now':
                 # tell Firay where he can find the leaf again
                 # Note to self: redo dialogue
+                if Nyafim:
+                    print("<get_clear_leaf: Talked to rubi again at stage 1>")
                 print(Rubi.expressions.e001)
                 input(Rubi.talking.t007)
             elif inter_id == 'ravia' and self.talked_ravia == 'n':
                 # Give Firay the leaf
                 # Implement items for the true experience lol
                 # Here's where you get the item.
+                if Nyafim:
+                    print("<get_clear_leaf: Talked to ravia at stage 1>")
                 print(Ravia.expressions.e001)
                 input(Ravia.talking.t000)
                 print(Firay.expressions.e000)
@@ -197,19 +222,26 @@ class get_clear_leaf(quests):
                 self.progress_quest(self.quest_steps, inter_id)
             else:  # This should never happen
                 print("Error! Error at get_leaf_ravia!")
+        self.q_update()
 
     def give_leaf_rubi(self, inter_id: str) -> None:
         """
         Giving the leaf to Rubi
         """
+        if Nyafim:
+            print("<get_clear_leaf: Successfully bridged to stage 2>")
         if self.quest_status == 'Active':
             if inter_id == 'ravia' and self.talked_ravia == 'talked to':
                 # tell Firay to f*** off
+                if Nyafim:
+                    print("<get_clear_leaf: talked to ravia again at stage 2>")
                 print(Ravia.expressions.e001)
                 input(Ravia.talking.t004)
             elif inter_id == 'rubi' and self.talked_rubi == 'not now':
                 # Change condition to searching for item in inventory later
                 # get the leaf from Firay and end quest
+                if Nyafim:
+                    print("<get_clear_leaf: talked to rubi to finish quest>")
                 # Main Dialogue Start
                 print(Firay.expressions.e000)
                 input(Firay.talking.t004)
@@ -242,6 +274,7 @@ class get_clear_leaf(quests):
                 interactability, but it's okay here since Rubi will
                 probably never be used again.'''
                 self.progress_quest(self.quest_steps, inter_id)
+        self.q_update()
 
 
 def run_quest(char_id: str) -> bool:
@@ -254,10 +287,14 @@ def run_quest(char_id: str) -> bool:
     }
     for quests in DQ:
         if DQ[quests][1] == 'Inactive':
+            if Nyafim:
+                print("<: run_quest Inactive triggered>")
             current_quest = q_lookup_table[quests]()
             current_quest.cont_quest(char_id)
             return True
         if DQ[quests][1] == 'Active':  # Both do the same thing for now idk
+            if Nyafim:
+                print("<: run_quest Active triggered>")
             current_quest = q_lookup_table[quests]()
             current_quest.cont_quest(char_id)
             return True

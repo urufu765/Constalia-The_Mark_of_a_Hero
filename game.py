@@ -15,16 +15,21 @@ from os import mkdir, path  # Saving
 import resources.eventulate as e  # Event manager
 from chars import Firay  # Firay text
 import msvcrt  # For convenient control purposes
-''' For troubleshooting only
-import sys
-def show_exception_and_exit(exc_type, exc_value, tb):
-    import traceback
-    traceback.print_exception(exc_type, exc_value, tb)
-    input("Press key to exit.")
-    sys.exit(-1)
 
-sys.excepthook = show_exception_and_exit
-'''
+# Debug Mode (new_yeetable_additions_for_insurance_measures)
+Nyafim = False
+
+if Nyafim:
+    # For troubleshooting only
+    import sys
+
+    def show_exception_and_exit(exc_type, exc_value, tb):
+        import traceback
+        traceback.print_exception(exc_type, exc_value, tb)
+        input("Press key to exit.")
+        sys.exit(-1)
+
+    sys.excepthook = show_exception_and_exit
 
 
 def startup_folder_creations() -> None:

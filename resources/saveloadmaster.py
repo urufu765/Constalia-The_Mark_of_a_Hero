@@ -11,6 +11,9 @@ from os import path
 import sys
 
 
+Nyafim = False
+
+
 def file_path_finder() -> str:
     """
     Finds the path that contains the saving folder.
@@ -40,15 +43,63 @@ def convertor(array: str) -> List[object]:
     """
     temp_array = []
     an_array = array.strip('][').split(', ')
+    if Nyafim:
+        print(f"<Here's the array in question: {an_array}>")
     for x in an_array:
         if x.isnumeric():
+            if Nyafim:
+                print(f"<{x} is numeric>")
             temp_array.append(int(x))
         elif x == 'True':
+            if Nyafim:
+                print(f"<{x} is True>")
             temp_array.append(True)
         elif x == 'False':
+            if Nyafim:
+                print(f"<{x} is False>")
             temp_array.append(False)
         else:
+            if Nyafim:
+                print(f"<{x} is string>")
             temp_array.append(x.strip("'").strip('"'))
+    if Nyafim:
+        print(f'<Here! {temp_array}>')
+    return temp_array
+
+
+def quest_convertor(array: str) -> List[object]:
+    """
+    Converts strings in the list to correct types. Specialized for quests.
+    """
+    temp_array = []
+    temp_array_2 = []
+    an_array = array[1:-1].split(', ')
+    if Nyafim:
+        print(f"<Here's the array in question: {an_array}>")
+    for x in an_array:
+        if x.isnumeric():
+            if Nyafim:
+                print(f"<{x} is numeric>")
+            temp_array.append(int(x))
+        elif x == 'True':
+            if Nyafim:
+                print(f"<{x} is True>")
+            temp_array.append(True)
+        elif x == 'False':
+            if Nyafim:
+                print(f"<{x} is False>")
+            temp_array.append(False)
+        elif len(temp_array) >= 2:
+            if Nyafim:
+                print(f"<{x} is part of an array>")
+            temp_array_2.append(x.strip('][').strip("'").strip('"'))
+        else:
+            if Nyafim:
+                print(f"<{x} is string>")
+            temp_array.append(x.strip("'").strip('"'))
+    temp_array.append(temp_array_2)
+    if Nyafim:
+        print(f'<Here! {temp_array}>')
     return temp_array
 
 
@@ -67,6 +118,8 @@ def save_game() -> None:
             print("Numbers only!")
     destination = get_resource_path('saves\\save_{}'.format(desired_num))
     # destination = 'saves\\save_{}'.format(desired_num)  # legacy
+    if Nyafim:
+        print(f"<Destination is {destination}>")
     with open(destination, 'w') as file:
         for x in DV:  # Global dictionary
             file.write(x + ';' + str(DV[x]) + '\n')
@@ -97,6 +150,8 @@ def load_game() -> None:
             print(t.action_text().invalid_input)
             print("Numbers only!")
     destination = get_resource_path('saves\\save_{}'.format(desired_num))
+    if Nyafim:
+        print(f"<Destination is {destination}>")
     # destination = 'saves\\save_{}'.format(desired_num)  # legacy
     try:
         with open(destination) as file:
@@ -118,6 +173,8 @@ def load_game() -> None:
                         z = y[1].strip('\n')
                         if z.isnumeric():
                             location_index[w][y[0]] = int(z)
+                        elif modes[num] == 'quests':
+                            location_index[w][y[0]] = quest_convertor(z)
                         elif modes[num] != 'main':
                             location_index[w][y[0]] = convertor(z)
                         else:

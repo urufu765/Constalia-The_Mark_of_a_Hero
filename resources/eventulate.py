@@ -112,9 +112,9 @@ def water_check(y: int, x: int) -> None:
     apply_interactions.water('')
 
 
-class apply_interactions:  # All for outputting text
+class apply_interactions:  # for applying interactions(usually outputs text)
     def door(id: str) -> None:
-        pass  # unused for now. Sentient door when?
+        pass  # reserved for jukebox
 
     def bed(id: str) -> None:
         if id == 'firay_bed':

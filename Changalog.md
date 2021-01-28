@@ -1,30 +1,23 @@
 # Changalog
-### Update 0.4.0 <Quests Recoded>
- First quest somewhat implemented(should be in working order). Save function not tested but should still work as intended. Previous saves from 0.3 may not work. Also hey! I'm starting to get how to use classes and stuff. And also a more detailed update from now on because yes.
- - global_dic.py
-    - Removed unused quests import as it was causing circular import error.
-    - Changed Rubi's interactable status from False to True
-    - Updated quests dictionary layout
-
- - eventulate.py
-    - Added new import to use the function run_quest from quests.py
-    - Edited char_check function appropriately
-    - Clarified a little what the character function in the apply_interactions class should do
-
- - Rubi.py
-    - Removed all the pesky \n that should've been yeeted in one of the previvous updates.(may add it all back later idk)
-
- - texts.py
-    - quest_accept text added
-
- - quests.py
-    - Almost everything has been changed and added.
+### Update 0.4.1 <Quests Recoded>
+Tested version. Fixed loading issue. The quest is completeable and can be saved and loaded at any time. Added Nyafim, my new rudamentary playtesting assistants.
+- Nyafim
+   - Also known as New Yeetable Additions For Insurance Measures. Dunno why I named it like that but oh well. Was supposed to be a single toggle but is now a per-file toggle. Helps with some debugging, but mostly a way to see the internals the way I want.
+- game.py
+   - Nyafim added
+- quests.py
+   - Nyafim added
+- eventulate.py
+   - Updated some comments to foreshadow
+- saveloadmaster.py
+   - Nyafim added
+   - New converter function specially made for quests so that the array within the array is preserved
 
 # Version History
 ## Version 0.1~0.5 - "Recode-stage"
 ### 0.1 - Essentials recoded
  0.1.0: First playable and downloadable version
- 
+
  0.1.1: Rearranged code and redid controls(along with adding North South East West)
 
  0.1.2: Rearranged files to make what the user needs to open very clear and made some changes to the chars
@@ -62,6 +55,8 @@
 ### 0.4: Quests recoded
  0.4.0: First quest somewhat implemented(should be in working order). Save function not tested but should still work as intended. Previous saves from 0.3 may not work. Also hey! I'm starting to get how to use classes and stuff. And also a more detailed update from now on because yes.
 
+ 0.4.1: Tested version. Fixed loading issue. The quest is completeable and can be saved and loaded at any time. Added Nyafim, my new rudamentary playtesting assistants.
+
 
 ## Upcoming:
  The first quest will be better implemented, and the code should look a little cleaner after some renovations(may not happen). Also doctext or whatever will be added to where appropriate.
@@ -69,7 +64,7 @@
 # Roadmap:
 ### 0.5: The end of recoded, with addons(will include new map)
  Tying up loose ends, finishing incomplete features, adding new contents. Guaranteed new map.
-### 0.6: Party Update
+### b.1: Party Update
  All about recruiting and stat checking!
-### 0.7: Combat Update
+### b.2: Combat Update
  All about combat! This update is gonna be big.
