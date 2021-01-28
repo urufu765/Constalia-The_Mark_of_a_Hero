@@ -14,7 +14,7 @@ Tested version. Fixed loading issue. The quest is completeable and can be saved 
    - New converter function specially made for quests so that the array within the array is preserved
 
 # Version History
-## Version 0.1~0.5 - "Recode-stage"
+## Recode Stage
 ### 0.1 - Essentials recoded
  0.1.0: First playable and downloadable version
 
@@ -64,7 +64,9 @@ Tested version. Fixed loading issue. The quest is completeable and can be saved 
 # Roadmap:
 ### 0.5: The end of recoded, with addons(will include new map)
  Tying up loose ends, finishing incomplete features, adding new contents. Guaranteed new map.
-### b.1: Party Update
+### b.1: Items Update
+ Inventory will actually be a thing.
+### b.2: Party Update
  All about recruiting and stat checking!
-### b.2: Combat Update
+### b.3: Combat Update
  All about combat! This update is gonna be big.
