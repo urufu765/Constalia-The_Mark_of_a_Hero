@@ -112,6 +112,18 @@ class talking:
             "\n│ together... would you mind playing   │"
             "\n│ outside just for a while?            │"
             "\n└────────────────┤....├────────────────┘")
+    # Declining quest Rubi's part
+    t015 = ("├─────┴────────────────────────────────┤"
+            "\n│ Alright, I'll be here when you're    │"
+            "\n│ done with whatever you need to do.   │"
+            "\n│ I'll need that ingredient soon.      │"
+            "\n└─────┤Press Enter to Continue...├─────┘")
+    # Telling firay where the house is again
+    t016 = ("├─────┴────────────────────────────────┤"
+            "\n│ Head south, across the bridge, to    │"
+            "\n│ set of houses. Ravia's should be the │"
+            "\n│ first one you see.                   │"
+            "\n└─────┤Press Enter to Continue...├─────┘")
 
 
 class Rubi:

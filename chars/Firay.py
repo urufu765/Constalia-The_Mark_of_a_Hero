@@ -134,6 +134,12 @@ class talking:
             "\n║                                      ║"
             "\n║                                      ║"
             "\n╚════════════════╡....╞════════════════╝")
+    # Declining Rubi's fetch quest
+    t017 = ("╠═════╩════════════════════════════════╣"
+            "\n║ Sorry, I gotta do something first.   ║"
+            "\n║                                      ║"
+            "\n║                                      ║"
+            "\n╚════════════════╡....╞════════════════╝")
 
 
 class interacting:

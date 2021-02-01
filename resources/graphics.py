@@ -1,11 +1,16 @@
 """
-The graphics engine for this game.
+Any "graphical" rendering and processing is done here!
+Do NOT stuff text only stuff here, that's for the text module.
 """
-from typing import List
+from typing import List, Dict
 from resources.global_dic import map_class as mapz
 from resources.global_dic import visuals as visual_dic
 from resources.global_dic import variables as DV
 from resources import player as p
+from assets import quests
+
+
+Nyafim = False
 
 
 def main_graphics_engine(map: int, position: List[int]) -> None:
@@ -83,6 +88,57 @@ def main_graphics_engine(map: int, position: List[int]) -> None:
                   View[6][4], View[6][5], View[6][6],  # Row 7
                   m.map_name, DV['stamina'],
                   p.Stamina.max_stamina))
+
+
+def battle_graphics_engine(map: int, position: List[int]) -> None:
+    """
+    A separate graphics engine made for battle. Just a little entry point
+    once I get to the point of coding the battle sequence in.
+    This is mostly just for reminding me though.
+    """
+    pass
+
+
+def quest_output() -> None:
+    """
+    Prints the list of quests that are active.
+    """
+    box_of_texts = quests.check_quest()
+    if Nyafim:
+        print(box_of_texts)
+    the_toggle = True
+    if box_of_texts[0][0] == 'No active quests':
+        the_toggle = False
+    print(
+        "┏Current━Quest:━━━━━━━━━━━┑"
+        f"\n┃ {box_of_texts[0][0]}"
+    )
+    if the_toggle:
+        print("┠Description:────────────")
+        for thing in box_of_texts[0][1]:
+            print(f"┃ {thing}")
+        print(
+            "┠Current─Objective:──────"
+            f"\n┃ {box_of_texts[0][2]}"
+        )
+    print(
+        "┣━━━━━━━━━━━━━━━━━━━━━━━━━┙"
+        "\n┞Incomplete─Quests:───"
+    )
+    if len(box_of_texts[1]) == 0:
+        print("│ No incomplete quests")
+    else:
+        for another_thing in box_of_texts[1]:
+            print(f"│ {another_thing}")
+    print("└─────────────────────")
+
+
+def controls_output(controls: Dict[str, object]) -> None:
+    """
+    Prints the list of controls. Currently implemented in the main module,
+    planning on moving it here.
+    """
+    pass
 
 
 if __name__ == '__main__':  # For testing purposes

@@ -3,7 +3,7 @@ Constalia: The Mark of a Hero
 Game by [URUFU765]
 """
 from typing import Dict, List
-import resources.graphics as graphics  # Graphics
+from resources import graphics  # Graphics
 import assets.texts as t  # Text
 from resources.global_dic import controls as c  # Controls
 from resources.global_dic import variables as DV  # Global variables
@@ -166,6 +166,9 @@ if __name__ == '__main__':
                 DV['X'] += 1
                 print(t.action_text.move_action)
         # Direction output end
+        elif play_move in play_control['Quest']:
+            # Note to self: Add a way to switch quests.
+            graphics.quest_output()
         elif play_move in play_control['Save']:
             saving.save_game()
         elif play_move in play_control['Load']:

@@ -3,9 +3,9 @@ Contains quests
 """
 from resources.global_dic import quests as DQ
 from resources.global_dic import interactables as DI
-from resources.player import Inventory as i
-from resources.player import Stamina as s
-from typing import Dict
+from resources.player import Inventory as i  # For item update
+from resources.player import Stamina as s  # For stamina checking?
+from typing import Dict, List, Tuple
 import chars.Rubi as Rubi
 import chars.Ravia as Ravia
 import chars.Firay as Firay
@@ -25,13 +25,25 @@ Nyafim = False
 class quests:
     """
     A quest object meant to store each quest as an object when accessed.
+    Should not be initiated on its own.
+
+    ++ Attributes ++
+    quest_id: The id of the quest usually given by the quest dictionary.
+    quest_type: Main or side quest. Unused variable for now.
+    quest_status: The status of the quest given by the quest dictionary.
+    step: The current step in the quest given by the quest dictionary.
     """
-    quest_id = str
-    quest_type = str
-    quest_status = str
-    step = int
+    quest_id: str
+    quest_type: str
+    quest_status: str
+    step: int
 
     def __init__(self, quest_id: str, quest_type: str):
+        """
+        Initializes the quest class.
+
+        This is an abstract class and shouldn't be initiated outside quests.
+        """
         self.quest_id = quest_id
         self.quest_type = quest_type
         self.quest_status = DQ[quest_id][1]
@@ -89,27 +101,48 @@ class quests:
 class get_clear_leaf(quests):
     """
     A quest for getting a leaf from Ravia, given by Rubi
+
+    ++ Attributes ++
+    quest_steps: The set of all steps in the quest
+    name: The name of the quest
+    quest_texts: The set of the objectives in the quest
+    description: The description of the quest
+    talked_rubi: The status of Rubi
+    talked_ravia: The status of Ravia
     """
     quest_steps: Dict[str, object]
     step: int
     name: str
-    quest_id = str
-    quest_type = str
-    quest_status = str
-    description: str
+    quest_id: str
+    quest_type: str
+    quest_texts: Dict[Tuple[str], str]
+    quest_status: str
+    description: List[str]
     talked_rubi: str
     talked_ravia: str
 
     def __init__(self):
+        """
+        Initializes the quest
+        """
         quests.__init__(self, 'get_leaf', 'main')
         self.quest_steps = {
             0: self.get_quest_rubi,
             1: self.get_leaf_ravia,  # Interacting with Ravia
             2: self.give_leaf_rubi  # Bringing the leaf back to Rubi
         }
+        # Although quest_steps could've been used to do the texts, quest_texts
+        # exists for finer control.
+        self.quest_texts = {
+            ('n', 'not now'): "Talk to Ravia at Ravia's house",
+            ('talked to', 'not now'): "Deliver the clear leaf to Rubi"
+        }
         self.name = 'Get Clear Leaf'
-        self.description = ('Rubi asks you to get a Clear Leaf from Ravia to'
-                            + ' complete her latest potion brew')
+        self.description = [
+            'Rubi asks you to get a Clear Leaf',
+            'from Ravia to complete her latest',
+            'potion brew.'
+            ]
         self.talked_ravia = DQ[self.quest_id][2][0]
         self.talked_rubi = DQ[self.quest_id][2][1]
 
@@ -134,7 +167,11 @@ class get_clear_leaf(quests):
 
     def get_quest_rubi(self, inter_id: str) -> None:
         """
-        Getting the quest from Rubi
+        Getting the quest from Rubi.
+        The interactions are:
+        - Rubi asking Firay to get something
+        - Firay accepting the quest
+        - Firay declining the quest
         """
         if self.sanity_check:
             if Nyafim:
@@ -167,7 +204,10 @@ class get_clear_leaf(quests):
                 self.progress_quest(self.quest_steps, inter_id)
             else:
                 # Declining the damn fetch quest
-                # Add dialogue for this
+                print(Firay.expressions.e000)
+                input(Firay.talking.t017)
+                print(Rubi.expressions.e000)
+                input(Rubi.talking.t015)
                 if Nyafim:
                     print("<get_clear_leaf: Firay Declines Quest>")
         else:  # This should never happen.
@@ -176,7 +216,11 @@ class get_clear_leaf(quests):
 
     def get_leaf_ravia(self, inter_id: str) -> None:
         """
-        Getting the leaf from Ravia
+        Getting the leaf from Ravia.
+        The interactions are:
+        - Rubi telling Firay the location
+        - Rubi telling Firay the location again
+        - Ravia giving Firay the quest item
         """
         if Nyafim:
             print("<get_clear_leaf: Quest successfully bridged to stage 1>")
@@ -198,8 +242,8 @@ class get_clear_leaf(quests):
                 # Note to self: redo dialogue
                 if Nyafim:
                     print("<get_clear_leaf: Talked to rubi again at stage 1>")
-                print(Rubi.expressions.e001)
-                input(Rubi.talking.t007)
+                print(Rubi.expressions.e000)
+                input(Rubi.talking.t016)
             elif inter_id == 'ravia' and self.talked_ravia == 'n':
                 # Give Firay the leaf
                 # Implement items for the true experience lol
@@ -226,7 +270,10 @@ class get_clear_leaf(quests):
 
     def give_leaf_rubi(self, inter_id: str) -> None:
         """
-        Giving the leaf to Rubi
+        Giving the leaf to Rubi.
+        The interactions are:
+        - Ravia telling Firay to "go away" in the form of a Hello
+        - Rubi receiving the leaf from Firay
         """
         if Nyafim:
             print("<get_clear_leaf: Successfully bridged to stage 2>")
@@ -236,7 +283,7 @@ class get_clear_leaf(quests):
                 if Nyafim:
                     print("<get_clear_leaf: talked to ravia again at stage 2>")
                 print(Ravia.expressions.e001)
-                input(Ravia.talking.t004)
+                input(Ravia.talking.t004)  # Might redo this in the future
             elif inter_id == 'rubi' and self.talked_rubi == 'not now':
                 # Change condition to searching for item in inventory later
                 # get the leaf from Firay and end quest
@@ -286,16 +333,51 @@ def run_quest(char_id: str) -> bool:
         'get_leaf': get_clear_leaf
     }
     for quests in DQ:
-        if DQ[quests][1] == 'Inactive':
-            if Nyafim:
-                print("<: run_quest Inactive triggered>")
-            current_quest = q_lookup_table[quests]()
-            current_quest.cont_quest(char_id)
-            return True
-        if DQ[quests][1] == 'Active':  # Both do the same thing for now idk
+        if DQ[quests][1] == 'Active':
             if Nyafim:
                 print("<: run_quest Active triggered>")
             current_quest = q_lookup_table[quests]()
             current_quest.cont_quest(char_id)
             return True
+        if DQ[quests][1] == 'Inactive':  # Both do the same thing for now idk
+            if Nyafim:
+                print("<: run_quest Inactive triggered>")
+            current_quest = q_lookup_table[quests]()
+            current_quest.cont_quest(char_id)
+            return True
     return False
+
+
+def check_quest() -> List[List[object]]:
+    """
+    Returns the appropriate texts that will be used in the graphics module.
+    """
+    # Might make this variable global since it's used multiple times with the
+    # same stuff... The other option is to put it in global_dic as a lookup
+    # table.
+    q_lookup_table = {
+        'get_leaf': get_clear_leaf
+    }
+    curr_quest_text = ['No active quests', ['empty'], 'empty']
+    incomplete_quests = []
+    for quests in DQ:
+        if DQ[quests][1] == 'Active':
+            if Nyafim:
+                print("<: check_quest Active triggered>")
+            current_quest = q_lookup_table[quests]()
+            try:
+                curr_quest_text = [
+                    current_quest.name,
+                    current_quest.description,
+                    current_quest.quest_texts[tuple(DQ[quests][2])]
+                ]
+            except KeyError:
+                curr_quest_text = [
+                    current_quest.name,
+                    current_quest.description,
+                    'Current Objective Not Found'  # Let's try not to have this
+                ]
+        elif DQ[quests][1] == 'Incomplete':
+            if Nyafim:
+                print("<: check_quest Incomplete triggered>")
+    return [curr_quest_text, incomplete_quests]
