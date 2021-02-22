@@ -2,7 +2,7 @@
 Contains everything regarding variables
 """
 from assets import maps as m
-from resources.player import Stamina as s
+from resources.char import Player as p
 
 # Note to self: DON'T FORGET TO UPDATE THIS YOU FORGETFUL IDIOT!
 # Also never call these versions directly, they're for internal use only
@@ -11,8 +11,8 @@ v_short = '0'
 v_major = '5'
 v_minor = '0'
 v_hotfx = '0'
-v_stype = 'u'  # u = untested, t = tested, r = release(able)
-v_ltype = 'untested'
+v_stype = 'n'  # u = untested, t = tested, r = release(able), n = N/A
+v_ltype = 'N/A'
 
 # Version
 version = {
@@ -27,7 +27,7 @@ variables = {
     'Y': 5,
     'X': 9,
     'm_id': 1,
-    'stamina': s.max_stamina
+    'stamina': 20
     }
 
 # Collision codes
@@ -51,7 +51,23 @@ legacy_visuals = {
     }
 
 visuals = {
-    'outtaboudz': (0, 0, 0)
+    'tile_size': 50,
+}
+
+test_color_dic = {  # for testing only
+    'p': (255, 0, 0),  # player
+    0: (110, 110, 110),
+    1: (0, 255, 0),
+    8: (255, 180, 180),
+    2: (0, 0, 255),
+    3: (0, 0, 255),
+    4: (90, 90, 255),
+    5: (90, 90, 255),
+    6: (90, 90, 255),
+    7: (90, 90, 255),
+    9: (70, 70, 70),
+    'w': (255, 255, 255),  # white
+    'o': (0, 0, 0),  # outtaboundz
 }
 
 # Every single door in the game that's noteworthy

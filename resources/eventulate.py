@@ -6,7 +6,7 @@ from resources.global_dic import variables as DV
 from resources.global_dic import doors
 from resources.global_dic import interactables as i
 from assets.quests import run_quest
-from resources.player import *
+from resources.char import Player
 import assets.texts as t
 from chars.Firay import *
 import chars.John as John
@@ -50,8 +50,7 @@ def bed_check(y: int, x: int) -> None:
                 print(t.action_text.ask_sleeping)
                 userin = msvcrt.getch().decode("utf-8")
             if userin.lower() == 'y':
-                DV['stamina'] = Stamina.stamina_recovery(
-                    Stamina, DV['stamina'], 'bed')
+                DV['stamina'] = Player.stamina_recovery(DV['stamina'], 'bed')
                 print('\n\n')
                 print(t.action_text.done_sleeping)
             elif userin.lower() == 'n':

@@ -1,23 +1,31 @@
 # Changalog
-### Update 0.5.0.0u <End o' Recoded>
- Pygame conversion has started, and the current code has been edited for easy removal once pygame is fully integrated.
+### Update 0.5.0.1n <End o' Recoded>
+ No visually noticeable update, but pygame window opens successfully now. Legacy is still on as pygame has yet to be utilized to playable level. At least the game may be playable with legacy on. Hopefully final version where legacy is forced on.
 
  - game.py
-   - sorted some imports
-   - added import check
-   - added legacy to a few of the method names
-   - moved some main functions to separate methods
-   - player control scheme is defaulted to wasd, not that it does anything.
- - engine.py(formally graphics.py)
-   - name change to reflect file use
-   - legacy added to a couple things
-   - class started, it doesn't do anything useful yet
+   - Changed some imports to reflect the name change
+   - pygame imported in file for refractoring purposes
+   - Switched some stuff around in the main function
+ - quests.py
+   - Unused imports were causing errors, so they muted
+ - char.py (formally player.py)
+   - Name changed for more general use
+   - Overhauled how the file works. Soon to be used by pygame and stuff
+ - engine.py
+   - Added a couple imports, edited a couple others
+   - Engineer:
+      - Changed name from main_gfx to Engineer
+      - No longer depends on an external function to run(not that it did anyways)
+      - Changed the variables to more reasonable ones
+      - Added new variables that will be used
+      - init completely overhauled
+      - new functions: __crop_map, draw_main, new_game
+   - Fixed legacy graphics engine so that it doesn't output an error
  - eventulate.py
-   - planned depreciation added to file description
+   - modified so that it doesn't cause an error with the new char.py
  - global_dic.py
-   - added version number thing
-   - added legacy to where needed
-   - added something else? Not sure what it does yet
+   - 'stamina' has been hardcoded to 20
+   - visuals has been changed to attribute dictionary, and a color dictionary was made separately
 
 
 # Version History
@@ -71,8 +79,11 @@
   #### 0.5.0 Cleanup later, Pygame: The game first:
    0.5.0.0: Pygame conversion has started, and the current code has been edited for easy removal once pygame is fully integrated.
 
+   0.5.0.1: No visually noticeable update, but pygame window opens successfully now. Legacy is still on as pygame has yet to be utilized to playable level. At least the game may be playable with legacy on. Hopefully final version where legacy is forced on.
+
 
 ## Upcoming:
+ - Sprites
  - Quests will be able to be switched from active to incomplete.
  - Text renovation.
  - Music. No more silence.

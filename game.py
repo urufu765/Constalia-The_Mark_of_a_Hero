@@ -10,10 +10,11 @@ from resources.global_dic import variables as DV  # Global variables
 from resources.global_dic import solids as solid_dic  # Solid codes
 from resources.global_dic import map_class as mapz  # Map data
 from resources import saveloadmaster as saving  # Saving files
-import resources.player as p  # Player
+from resources.char import Player as p  # Player
 from os import mkdir, path  # Saving
 import resources.eventulate as e  # Event manager
 from chars import Firay  # Firay text
+# import pygame  # For coding convenience
 
 # Game is running?
 GAME = True
@@ -21,6 +22,7 @@ GAME = True
 # Debug Mode (new_yeetable_additions_for_insurance_measures)
 Nyafim = False
 
+# Force Legacy build
 # Toggle this to False once Pygame engine is ready for launch
 LEGACY = True
 try:
@@ -194,9 +196,14 @@ if __name__ == '__main__':
         input(t.system_text.text)
         print("\n"*10)
         play_control = legacy_control_chooser()  # prompts player to choose
+    else:
+        main_game = engine.Engineer(True)
+        main_game.new_game()
     while GAME:
-        if not LEGACY:
-            engine.engineer()
-        else:
+        if LEGACY:
             engine.legacy_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
             GAME = legacy_event_handler(legacy_input_handler(play_control))
+        else:
+            main_game.draw_main()  # unbound but that's okay
+            pygame.time.wait(5000)  # just to see what's going on
+            GAME = False  # since there's no way to quit at all

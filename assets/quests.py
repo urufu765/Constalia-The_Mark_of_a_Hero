@@ -3,8 +3,8 @@ Contains quests
 """
 from resources.global_dic import quests as DQ
 from resources.global_dic import interactables as DI
-from resources.player import Inventory as i  # For item update
-from resources.player import Stamina as s  # For stamina checking?
+# from resources.player import Inventory as i  # For item update
+# from resources.player import Stamina as s  # For stamina checking?
 from typing import Dict, List, Tuple
 import chars.Rubi as Rubi
 import chars.Ravia as Ravia
