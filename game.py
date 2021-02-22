@@ -2,11 +2,12 @@
 Constalia: The Mark of a Hero
 Game by [URUFU765]
 """
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from resources import engine  # Graphics
 import assets.texts as t  # Text
 from resources.global_dic import controls as c  # Controls
 from resources.global_dic import variables as DV  # Global variables
+from resources.global_dic import pygame_variables as PV  # Pygame variables
 from resources.global_dic import solids as solid_dic  # Solid codes
 from resources.global_dic import map_class as mapz  # Map data
 from resources import saveloadmaster as saving  # Saving files
@@ -14,7 +15,6 @@ from resources.char import Player as p  # Player
 from os import mkdir, path  # Saving
 import resources.eventulate as e  # Event manager
 from chars import Firay  # Firay text
-# import pygame  # For coding convenience
 
 # Game is running?
 GAME = True
@@ -23,11 +23,16 @@ GAME = True
 Nyafim = False
 
 # Force Legacy build
-# Toggle this to False once Pygame engine is ready for launch
-LEGACY = True
+LEGACY = False
+
+# Try importing pygame
 try:
-    import pygame
+    import pygame as pG
 except ModuleNotFoundError:
+    print("Please install Pygame for the full experience!")
+    LEGACY = True
+except NameError:
+    print("Python 3.9 may not be supported by Pygame.")
     LEGACY = True
 
 if Nyafim:
@@ -154,7 +159,8 @@ def legacy_input_handler(play_control: Dict[str, List[str]]) -> str:
     return p_input
 
 
-def legacy_event_handler(play_move: str) -> bool:
+def legacy_event_handler(
+        play_move: str, play_control: Dict[str, List[str]]) -> bool:
     """
     Applies the correct output using the string input
     Output is only used to determine whether to stop the game or not.
@@ -188,22 +194,54 @@ def legacy_event_handler(play_move: str) -> bool:
     return True
 
 
+def event_handler() -> bool:
+    """
+    Applies the correct output using events and keypresses
+    Default is WASD and arrows and will always be WASD and arrows
+    """
+    for event in pG.event.get():
+        if event.type == pG.QUIT:
+            return False
+        elif event.type == pG.KEYDOWN:
+            if event.key == pG.K_w or event.key == pG.K_UP:
+                if not event_manager(DV['Y'] - 1, DV['X']):
+                    DV['Y'] -= 1
+            elif event.key == pG.K_s or event.key == pG.K_DOWN:
+                if not event_manager(DV['Y'] + 1, DV['X']):
+                    DV['Y'] += 1
+            elif event.key == pG.K_a or event.key == pG.K_LEFT:
+                if not event_manager(DV['Y'], DV['X'] - 1):
+                    DV['X'] -= 1
+            elif event.key == pG.K_d or event.key == pG.K_RIGHT:
+                if not event_manager(DV['Y'], DV['X'] + 1):
+                    DV['X'] += 1
+            elif event.key == pG.K_q:
+                pass  # quest output
+            elif event.key == pG.K_z:
+                pass  # save
+            elif event.key == pG.K_x:
+                pass  # load
+    return True
+
+
 # Game
 if __name__ == '__main__':
     startup_folder_creations()
     play_control = c.control_schemes[3]  # WASD default
-    if LEGACY:
+    if not LEGACY:
+        main_game = engine.Engineer(True)
+        main_game.new_game()
+    else:
         input(t.system_text.text)
         print("\n"*10)
         play_control = legacy_control_chooser()  # prompts player to choose
-    else:
-        main_game = engine.Engineer(True)
-        main_game.new_game()
     while GAME:
-        if LEGACY:
-            engine.legacy_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
-            GAME = legacy_event_handler(legacy_input_handler(play_control))
-        else:
+        if not LEGACY:
             main_game.draw_main()  # unbound but that's okay
-            pygame.time.wait(5000)  # just to see what's going on
-            GAME = False  # since there's no way to quit at all
+            pG.time.wait(1000//PV['FPS'])
+            GAME = event_handler()
+
+        else:
+            engine.legacy_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
+            GAME = legacy_event_handler(
+                legacy_input_handler(play_control), play_control)

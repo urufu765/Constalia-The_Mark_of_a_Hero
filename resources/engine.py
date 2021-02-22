@@ -6,152 +6,150 @@ Formally known as graphics.py for versions prior to 0.5
 from typing import List, Dict, Optional, Tuple
 from resources.global_dic import map_class as mapz
 from resources.global_dic import legacy_visuals as visual_dic
-from resources.global_dic import visuals as V
+from resources.global_dic import pygame_variables as V
 from resources.global_dic import variables as DV
 from resources.global_dic import test_color_dic as CD
 from resources.global_dic import version as VER
 from resources.char import Player as p
 from resources import char
 from assets import quests
-# import pygame  # For coding convenience
 
+# Debugger
+Nyafim = False
 
 try:
     import pygame
+
+    class Engineer:
+        # window
+        size: Tuple[int, int]
+        width: int
+        height: int
+        screen: Optional[pygame.Surface]
+        w_tiles: int
+        l_tiles: int
+        tiles_number: Tuple[int, int]
+        background: Optional[pygame.Surface]
+
+        __characters: List[char.Characters]
+        __run_stat: bool
+        __map_view: List[List[any]]  # Will convert to List[str] later
+        __text_view: List[str]
+
+        ''' Some demo stuff first try and stuff idk
+        def __init__(self):
+            pygame.init()
+            self.width = 900  # Always maintain integer divisibility with mrsw
+            self.height = 600
+            self.mrsw = 15  # Odd numbers only!
+            self.mrsh = 7  # Odd numbers only!
+            self.tiles = self.width / self.mrsw
+            self.crsh = self.height - self.mrsh * self.tiles
+            self.map_view = []
+            self.screen = pygame.display.set_mode((self.width, self.height))
+
+            pygame.display.set_caption(
+                f"Constalia: The Mark of a Hero [{V['specific']}]")
+            for y in range(self.mrsh):
+                for x in range(self.mrsw):
+                    self.map_view.append(
+                        pygame.Rect(
+                            self.tiles * x,
+                            self.crsh + self.tiles * y,
+                            self.width,
+                            self.height))
+            self.text_view = pygame.Rect(0, 0, self.width, self.crsh)
+        '''
+        def __init__(self, running: bool):
+            # Main window
+            self.w_tiles, self.l_tiles = 15, 15  # always odd numbers
+            self.tile_num = (self.w_tiles, self.l_tiles)
+            self.width = self.w_tiles * V['tile_size']
+            self.height = self.l_tiles * V['tile_size']
+            self.size = (self.width, self.height)
+            self.screen = None
+            self.background = None
+            self.__characters = []
+            self.__run_stat = running
+            self.__map_view = []
+
+            self.__text_view = []  # Separate window potentially
+
+        def __crop_map(self) -> Tuple[int, int]:
+            """
+            Crops the map from maps.py
+            Also attempts to match the map's size so it's more visually
+            pleasing.
+            Outputs offset: (y, x)
+            """
+            offset_y = DV['Y'] - (self.l_tiles - 1) // 2
+            offset_x = DV['X'] - (self.w_tiles - 1) // 2
+            m = mapz[DV['m_id']].grid
+
+            # y boundary checks
+            if self.l_tiles >= len(m) + 4:
+                offset_y = 0 - ((self.l_tiles - len(m) + 4) // 2)
+            else:
+                if offset_y < - 2:
+                    offset_y = - 2
+                elif self.l_tiles + offset_y > len(m) + 2:
+                    offset_y = len(m) + 2 - self.l_tiles
+
+            # x boundary checks
+            if self.w_tiles >= len(m[0]) + 4:
+                offset_x = 0 - ((self.w_tiles - len(m[0]) + 4) // 2)
+            else:
+                if offset_x < - 2:
+                    offset_x = - 2
+                elif self.w_tiles + offset_x > len(m[0]) + 2:
+                    offset_x = len(m[0]) + 2 - self.w_tiles
+
+            # cropping bit
+            self.__map_view = []
+            for y in range(offset_y, offset_y + self.l_tiles):
+                temp = []
+                for x in range(offset_x, offset_x + self.w_tiles):
+                    try:
+                        if x == DV['X'] and y == DV['Y']:
+                            temp.append('p')  # player
+                        else:
+                            temp.append(m[y][x])
+                    except IndexError:
+                        temp.append('o')  # out of bounds
+                self.__map_view.append(temp)
+            return offset_y, offset_x
+
+        def draw_main(self) -> None:
+            """
+            Draws the screen using the cropped map
+            """
+            offset = self.__crop_map()  # offset unused here for now
+            # color mode
+            for y, row in enumerate(self.__map_view):
+                for x, block in enumerate(row):
+                    self.screen.fill(
+                        CD[block],
+                        pygame.Rect(
+                            x * V['tile_size'],
+                            y * V['tile_size'],
+                            V['tile_size'], V['tile_size']
+                        ))
+            pygame.display.flip()
+
+        def new_game(self) -> None:
+            """
+            Initializes the game
+            """
+            pygame.display.set_caption(
+                f"Constalia: The Mark of a Hero [{VER['detailed']}]")
+            self.screen = pygame.display.set_mode(self.size)
+            # self.background = pygame.image.load()  # note to self place this
+            # in draw_main()
+            # Insert initializing objects here
 except ModuleNotFoundError:
     pass
-
-
-Nyafim = False
-
-
-# Development paused at the moment until I can figure out how 2 pygame
-class Engineer:
-    # window
-    size: Tuple[int, int]
-    width: int
-    height: int
-    screen: Optional[pygame.Surface]
-    w_tiles: int
-    l_tiles: int
-    tiles_number: Tuple[int, int]
-    background: Optional[pygame.Surface]
-
-    __characters: List[char.Characters]
-    __run_stat: bool
-    __map_view: List[List[any]]  # Will convert to List[str] later
-    __text_view: List[str]
-
-    ''' Some demo stuff first try and stuff idk
-    def __init__(self):
-        pygame.init()
-        self.width = 900  # Always maintain integer divisibility with mrsw
-        self.height = 600
-        self.mrsw = 15  # Odd numbers only!
-        self.mrsh = 7  # Odd numbers only!
-        self.tiles = self.width / self.mrsw
-        self.crsh = self.height - self.mrsh * self.tiles
-        self.map_view = []
-        self.screen = pygame.display.set_mode((self.width, self.height))
-
-        pygame.display.set_caption(
-            f"Constalia: The Mark of a Hero [{V['specific']}]")
-        for y in range(self.mrsh):
-            for x in range(self.mrsw):
-                self.map_view.append(
-                    pygame.Rect(
-                        self.tiles * x,
-                        self.crsh + self.tiles * y,
-                        self.width,
-                        self.height))
-        self.text_view = pygame.Rect(0, 0, self.width, self.crsh)
-    '''
-    def __init__(self, running: bool):
-        # Main window
-        self.w_tiles, self.l_tiles = 15, 15  # always odd numbers
-        self.tile_num = (self.w_tiles, self.l_tiles)
-        self.width = self.w_tiles * V['tile_size']
-        self.height = self.l_tiles * V['tile_size']
-        self.size = (self.width, self.height)
-        self.screen = None
-        self.background = None
-        self.__characters = []
-        self.__run_stat = running
-        self.__map_view = []
-
-        self.__text_view = []  # Separate window potentially
-
-    def __crop_map(self) -> Tuple[int, int]:
-        """
-        Crops the map from maps.py
-        Also attempts to match the map's size so it's more visually pleasing
-        Outputs offset: (y, x)
-        """
-        offset_y = DV['Y'] - (self.l_tiles - 1) // 2
-        offset_x = DV['X'] - (self.w_tiles - 1) // 2
-        m = mapz[DV['m_id']].grid
-
-        # y boundary checks
-        if self.l_tiles >= len(m) + 4:
-            offset_y = 0 - ((self.l_tiles - len(m) + 4) // 2)
-        else:
-            if offset_y < - 2:
-                offset_y = - 2
-            elif self.l_tiles + offset_y > len(m) + 2:
-                offset_y = len(m) + 2 - self.l_tiles
-
-        # x boundary checks
-        if self.w_tiles >= len(m[0]) + 4:
-            offset_x = 0 - ((self.w_tiles - len(m[0]) + 4) // 2)
-        else:
-            if offset_x < - 2:
-                offset_x = - 2
-            elif self.w_tiles + offset_x > len(m[0]) + 2:
-                offset_x = len(m[0]) + 2 - self.w_tiles
-
-        # cropping bit
-        self.__map_view = []
-        for y in range(offset_y, offset_y + self.l_tiles):
-            temp = []
-            for x in range(offset_x, offset_x + self.w_tiles):
-                try:
-                    if x == DV['X'] and y == DV['Y']:
-                        temp.append('p')  # player
-                    else:
-                        temp.append(m[y][x])
-                except IndexError:
-                    temp.append('o')  # out of bounds
-            self.__map_view.append(temp)
-        return offset_y, offset_x
-
-    def draw_main(self) -> None:
-        """
-        Draws the screen using the cropped map
-        """
-        offset = self.__crop_map()  # offset unused here for now
-        # color mode
-        print(self.__map_view)
-        for y, row in enumerate(self.__map_view):
-            for x, block in enumerate(row):
-                self.screen.fill(
-                    CD[block],
-                    pygame.Rect(
-                        x * V['tile_size'],
-                        y * V['tile_size'],
-                        V['tile_size'], V['tile_size']
-                    ))
-        pygame.display.flip()
-
-    def new_game(self) -> None:
-        """
-        Initializes the game
-        """
-        pygame.display.set_caption(
-            f"Constalia: The Mark of a Hero [{VER['detailed']}]")
-        self.screen = pygame.display.set_mode(self.size)
-        # self.background = pygame.image.load()  # note to self place this
-        # in draw_main()
-        # Insert initializing objects here
+except NameError:
+    pass
 
 
 def legacy_graphics_engine(map: int, position: List[int]) -> None:

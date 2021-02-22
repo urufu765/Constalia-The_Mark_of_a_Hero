@@ -50,8 +50,9 @@ legacy_visuals = {
     'Mithavil Interior': ['░', 'C', '▒', '╬', '┃', '━', '│', '─', 'Ξ', '█']
     }
 
-visuals = {
+pygame_variables = {
     'tile_size': 50,
+    'FPS': 15
 }
 
 test_color_dic = {  # for testing only
