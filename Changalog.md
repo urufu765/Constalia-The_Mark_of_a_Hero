@@ -1,26 +1,23 @@
 # Changalog
-### Update 0.4.2 <Quests Recoded>
- Finished up the quest(with some missing parts that will be added in the items update) and added a way to view the current quest. Docstrings have been added where appropriate. Likely the last version of 0.4
+### Update 0.5.0.0u <End o' Recoded>
+ Pygame conversion has started, and the current code has been edited for easy removal once pygame is fully integrated.
 
  - game.py
-   - Removed the redundant part of graphics import
-   - Added quest action
- - quests.py
-   - Added import typing.Tuple and typing.List
-   - Clarified a few things about a few imports(mostly a note to self)
-   - Changed how description works, and added quest texts for telling the player their next objective
-   - Added the missing dialogues and changed one
-   - Added check_quest, the function that gets the texts and hands it to the graphics module for printing.
-   - Docstrings added for the classes and their initializers.
- - Firay.py and Rubi.py
-   - Added new talking texts
- - graphics.py
-   - Clarified the use of this module
-   - New imports: quests.py and typing.Dict
-   - Nya!
-   - Added a spot for the battle graphics engine, won't be implemnted until the combat update though.
-   - Added a spot for printing the controls. May or may not be implemeted in version 0.4
-   - Added the quest output, which prints the current quest, the description, the current objective, and the list of incomplete quests.
+   - sorted some imports
+   - added import check
+   - added legacy to a few of the method names
+   - moved some main functions to separate methods
+   - player control scheme is defaulted to wasd, not that it does anything.
+ - engine.py(formally graphics.py)
+   - name change to reflect file use
+   - legacy added to a couple things
+   - class started, it doesn't do anything useful yet
+ - eventulate.py
+   - planned depreciation added to file description
+ - global_dic.py
+   - added version number thing
+   - added legacy to where needed
+   - added something else? Not sure what it does yet
 
 
 # Version History
@@ -70,16 +67,20 @@
 
   0.4.2: Finished up the quest(with some missing parts that will be added in the items update) and added a way to view the current quest. Docstrings have been added where appropriate. Likely the last version of 0.4
 
+ ### 0.5: End o' Recode
+  #### 0.5.0 Cleanup later, Pygame: The game first:
+   0.5.0.0: Pygame conversion has started, and the current code has been edited for easy removal once pygame is fully integrated.
+
+
 ## Upcoming:
- Quests will be able to be switched from active to incomplete(Probably coming in 0.5). Text renovation(probably coming in 0.5).
+ - Quests will be able to be switched from active to incomplete.
+ - Text renovation.
+ - Music. No more silence.
 
 # Roadmap:
- ### 0.5: The end of recoded, with addons(will include new map)
-  Tying up loose ends, finishing incomplete features, adding new contents. Guaranteed new map.
  ### b.1: Items Update
   Inventory will actually be a thing.
  ### b.2: Party Update
   All about recruiting and stat checking!
  ### b.3: Combat Update
   All about combat! This update is gonna be big.
- ### ???: Pygame?

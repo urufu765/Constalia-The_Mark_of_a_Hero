@@ -4,6 +4,24 @@ Contains everything regarding variables
 from assets import maps as m
 from resources.player import Stamina as s
 
+# Note to self: DON'T FORGET TO UPDATE THIS YOU FORGETFUL IDIOT!
+# Also never call these versions directly, they're for internal use only
+v_long = 'Version 0'
+v_short = '0'
+v_major = '5'
+v_minor = '0'
+v_hotfx = '0'
+v_stype = 'u'  # u = untested, t = tested, r = release(able)
+v_ltype = 'untested'
+
+# Version
+version = {
+    'common': f'v {v_short}.{v_major}.{v_minor}',
+    'specific': f'v {v_short}.{v_major}.{v_minor}.{v_hotfx}',
+    'detailed': f'v {v_short}.{v_major}.{v_minor}.{v_hotfx}{v_stype}',
+    'fancy': f'{v_long} ({v_short}.{v_major}.{v_minor}.{v_hotfx})[{v_ltype}]'
+}
+
 # Global dictionary!
 variables = {
     'Y': 5,
@@ -25,12 +43,16 @@ map_class = {
     2: m.Raviahouse
     }
 
-# Generating graphics
-visuals = {
+# Generating graphics(legacy)
+legacy_visuals = {
     'outtaboundz': "▒",
     'Mithavil': [' ', '҈', '■', '⌠', '▓', 'ﬕ', '‼', '□', 'Ξ', '█'],
     'Mithavil Interior': ['░', 'C', '▒', '╬', '┃', '━', '│', '─', 'Ξ', '█']
     }
+
+visuals = {
+    'outtaboudz': (0, 0, 0)
+}
 
 # Every single door in the game that's noteworthy
 doors = {

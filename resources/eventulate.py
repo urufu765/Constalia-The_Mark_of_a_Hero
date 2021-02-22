@@ -1,5 +1,5 @@
 """
-Event handler. Handle with care.
+Event handler. Handle with care. Legacy only.
 """
 import msvcrt
 from resources.global_dic import variables as DV

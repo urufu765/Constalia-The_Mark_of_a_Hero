@@ -3,7 +3,7 @@ Constalia: The Mark of a Hero
 Game by [URUFU765]
 """
 from typing import Dict, List
-from resources import graphics  # Graphics
+from resources import engine  # Graphics
 import assets.texts as t  # Text
 from resources.global_dic import controls as c  # Controls
 from resources.global_dic import variables as DV  # Global variables
@@ -14,10 +14,19 @@ import resources.player as p  # Player
 from os import mkdir, path  # Saving
 import resources.eventulate as e  # Event manager
 from chars import Firay  # Firay text
-import msvcrt  # For convenient control purposes
+
+# Game is running?
+GAME = True
 
 # Debug Mode (new_yeetable_additions_for_insurance_measures)
 Nyafim = False
+
+# Toggle this to False once Pygame engine is ready for launch
+LEGACY = True
+try:
+    import pygame
+except ModuleNotFoundError:
+    LEGACY = True
 
 if Nyafim:
     # For troubleshooting only
@@ -53,7 +62,7 @@ def startup_folder_creations() -> None:
         input("Unknown error has occured! Please contact developer!")
 
 
-def control_chooser() -> Dict[str, List[str]]:
+def legacy_control_chooser() -> Dict[str, List[str]]:
     """
     Allows the player to choose control scheme
     """
@@ -122,56 +131,72 @@ def event_manager(y: int, x: int) -> bool:
     return False
 
 
+def legacy_input_handler(play_control: Dict[str, List[str]]) -> str:
+    """
+    Handles user input and outputs it
+    """
+    import msvcrt
+    checked = False
+    p_input = ''
+    while not checked:
+        print("Input: ")
+        p_input = msvcrt.getch().decode("utf-8")
+        for x in play_control:
+            if p_input in play_control[x]:
+                checked = True
+        if not checked:
+            print(t.action_text.invalid_input)
+            print("Controls:")
+            for opti in play_control:
+                print("{0}: {1}".format(opti, play_control[opti]))
+    return p_input
+
+
+def legacy_event_handler(play_move: str) -> bool:
+    """
+    Applies the correct output using the string input
+    Output is only used to determine whether to stop the game or not.
+    """
+    if play_move in play_control['Up']:
+        if not event_manager(DV['Y'] - 1, DV['X']):
+            DV['Y'] -= 1
+            print(t.action_text.move_action)
+    elif play_move in play_control['Down']:
+        if not event_manager(DV['Y'] + 1, DV['X']):
+            DV['Y'] += 1
+            print(t.action_text.move_action)
+    elif play_move in play_control['Left']:
+        if not event_manager(DV['Y'], DV['X'] - 1):
+            DV['X'] -= 1
+            print(t.action_text.move_action)
+    elif play_move in play_control['Right']:
+        if not event_manager(DV['Y'], DV['X'] + 1):
+            DV['X'] += 1
+            print(t.action_text.move_action)
+    # Direction output end
+    elif play_move in play_control['Quest']:
+        # Note to self: Add a way to switch quests.
+        engine.legacy_quest_output()
+    elif play_move in play_control['Save']:
+        saving.save_game()
+    elif play_move in play_control['Load']:
+        saving.load_game()
+    elif play_move in play_control['Quit']:
+        return False
+    return True
+
+
 # Game
 if __name__ == '__main__':
     startup_folder_creations()
-    input(t.system_text.text)
-    print("\n"*10)
-    play_control = control_chooser()  # prompts player to choose controls
-    while True:
-        graphics.main_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
-        play_move = ''
-        checked = False
-
-        # checking input
-        while not checked:
-            print("Input: ")
-            play_move = msvcrt.getch().decode("utf-8")
-            for x in play_control:
-                if play_move in play_control[x]:
-                    checked = True
-            if not checked:
-                print(t.action_text.invalid_input)
-                print("Controls:")
-                for opti in play_control:
-                    print("{0}: {1}".format(opti, play_control[opti]))
-
-        # output of game based on input
-        # Direction output start
-        temp_id = DV['m_id']
-        if play_move in play_control['Up']:
-            if not event_manager(DV['Y'] - 1, DV['X']):
-                DV['Y'] -= 1
-                print(t.action_text.move_action)
-        elif play_move in play_control['Down']:
-            if not event_manager(DV['Y'] + 1, DV['X']):
-                DV['Y'] += 1
-                print(t.action_text.move_action)
-        elif play_move in play_control['Left']:
-            if not event_manager(DV['Y'], DV['X'] - 1):
-                DV['X'] -= 1
-                print(t.action_text.move_action)
-        elif play_move in play_control['Right']:
-            if not event_manager(DV['Y'], DV['X'] + 1):
-                DV['X'] += 1
-                print(t.action_text.move_action)
-        # Direction output end
-        elif play_move in play_control['Quest']:
-            # Note to self: Add a way to switch quests.
-            graphics.quest_output()
-        elif play_move in play_control['Save']:
-            saving.save_game()
-        elif play_move in play_control['Load']:
-            saving.load_game()
-        elif play_move in play_control['Quit']:
-            break
+    play_control = c.control_schemes[3]  # WASD default
+    if LEGACY:
+        input(t.system_text.text)
+        print("\n"*10)
+        play_control = legacy_control_chooser()  # prompts player to choose
+    while GAME:
+        if not LEGACY:
+            engine.engineer()
+        else:
+            engine.legacy_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
+            GAME = legacy_event_handler(legacy_input_handler(play_control))
