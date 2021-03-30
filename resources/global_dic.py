@@ -2,32 +2,14 @@
 Contains everything regarding variables
 """
 from assets import maps as m
-from resources.char import Player as p
-
-# Note to self: DON'T FORGET TO UPDATE THIS YOU FORGETFUL IDIOT!
-# Also never call these versions directly, they're for internal use only
-v_long = 'Version 0'
-v_short = '0'
-v_major = '5'
-v_minor = '0'
-v_hotfx = '0'
-v_stype = 'n'  # u = untested, t = tested, r = release(able), n = N/A
-v_ltype = 'N/A'
-
-# Version
-version = {
-    'common': f'v {v_short}.{v_major}.{v_minor}',
-    'specific': f'v {v_short}.{v_major}.{v_minor}.{v_hotfx}',
-    'detailed': f'v {v_short}.{v_major}.{v_minor}.{v_hotfx}{v_stype}',
-    'fancy': f'{v_long} ({v_short}.{v_major}.{v_minor}.{v_hotfx})[{v_ltype}]'
-}
+from resources.player import Stamina as s
 
 # Global dictionary!
 variables = {
     'Y': 5,
     'X': 9,
     'm_id': 1,
-    'stamina': 20
+    'stamina': s.max_stamina
     }
 
 # Collision codes
@@ -43,33 +25,12 @@ map_class = {
     2: m.Raviahouse
     }
 
-# Generating graphics(legacy)
-legacy_visuals = {
+# Generating graphics
+visuals = {
     'outtaboundz': "▒",
     'Mithavil': [' ', '҈', '■', '⌠', '▓', 'ﬕ', '‼', '□', 'Ξ', '█'],
     'Mithavil Interior': ['░', 'C', '▒', '╬', '┃', '━', '│', '─', 'Ξ', '█']
     }
-
-pygame_variables = {
-    'tile_size': 50,
-    'FPS': 15
-}
-
-test_color_dic = {  # for testing only
-    'p': (255, 0, 0),  # player
-    0: (110, 110, 110),
-    1: (0, 255, 0),
-    8: (255, 180, 180),
-    2: (0, 0, 255),
-    3: (0, 0, 255),
-    4: (90, 90, 255),
-    5: (90, 90, 255),
-    6: (90, 90, 255),
-    7: (90, 90, 255),
-    9: (70, 70, 70),
-    'w': (255, 255, 255),  # white
-    'o': (0, 0, 0),  # outtaboundz
-}
 
 # Every single door in the game that's noteworthy
 doors = {

@@ -1,6 +1,6 @@
 # Changalog
-### Update a.0.1.1n <Alpha 0>
-  Changed how the changealog looks and changed the version numbering.
+### Update 0.4.2.1 <Quests recoded>
+  Split from main just in case I want to work on legacy
 
 
 # Version History
@@ -50,37 +50,14 @@
 
     0.4.2: Finished up the quest(with some missing parts that will be added in the items update) and added a way to view the current quest. Docstrings have been added where appropriate. Likely the last version of 0.4
 
-## a for alpha: Redoing yet again but with Pygame
-    Alpha is basically redoing what I recoded again to fit pygame better because I believe the pygame is the way forward... but if the demand is there I'll update the legacy too
-  ### a.0 Cleanup never, Pygame: The game first:
-    a.0.0.0: Pygame conversion has started, and the current code has been edited for easy removal once pygame is fully integrated.
-
-    a.0.0.1: No visually noticeable update, but pygame window opens successfully now. Legacy is still on as pygame has yet to be utilized to playable level. At least the game may be playable with legacy on. Hopefully final version where legacy is forced on.
-
-    a.0.1.0: Say goodbye to Legacy mode. You can only access Legacy by either not having pygame or disabling it in code. The game should function almost exactly like before except you still gotta answer to the terminal. That'll be fixed shortly. Also some colors have been combined for convenience so things may not look as they should, at least for now.
-
-    a.0.1.1: Changed how the changealog looks and changed the version numbering.
-
+    0.4.2.1: Split from main just in case I want to work on legacy
 
 ## Upcoming:
- - Sprites
+ - Sprites?
  - Quests will be able to be switched from active to incomplete.
  - Text renovation.
- - Music. No more silence.
- - Change how events are loaded in, with a temporary dictionary that loads the events in that area, an appendable dictionary that is loaded first (that is used to store changes in save files), and default set values that are loaded from the map if it doesn't exist in the stored appendable dictionary.
+ - Music? Maybe
 
 # Roadmap:
- ### a.1: Mechanics & Assets Alpha
-  Adapting the mechanics fully and completing maps to make pygame work as intended, as well as making new assets and stuff
- ### a.2: Maps Alpha
-  Redoing maps to make the game a whole lot better
- ### a.3: Interactables 2.0 Alpha
-  Adapting and improving the interactables fully to work better with pygame
- ### a.4: Quests 2.0 Alpha
-  Quests. Improve and adapt the old design to fit pygame and such.
- ### b.1: Items Update
-  Inventory will actually be a thing.
- ### b.2: Party Update
-  All about recruiting and stat checking!
- ### b.3: Combat Update
-  All about combat! This update is gonna be big.
+ ### 0.5: The end of recoded, with addons(will include new map)
+  Tying up loose ends, finishing incomplete features, adding new contents. Guaranteed new map.
