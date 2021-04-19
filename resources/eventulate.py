@@ -5,6 +5,8 @@ import msvcrt
 from resources.global_dic import variables as DV
 from resources.global_dic import doors
 from resources.global_dic import interactables as i
+from resources.global_dic import LOOP_FILES as LF
+from resources import jukebox as JB
 from assets.quests import run_quest
 from resources.char import Player
 import assets.texts as t
@@ -109,6 +111,143 @@ def water_check(y: int, x: int) -> None:
     Checks water interaction. Coordinates don't matter for now
     """
     apply_interactions.water('')
+
+
+def bed(action_id: str) -> None:
+    """
+    For bed interactions
+    """
+    if action_id == 'firay_bed_interact':
+        print(expressions.e000)
+        input(interacting.i001)
+        print(t.action_text.ask_sleeping)
+        userin = msvcrt.getch().decode("utf-8")
+        while userin.lower() not in ['y', 'n']:
+            print(t.action_text.invalid_input)
+            print(t.action_text.ask_sleeping)
+            userin = msvcrt.getch().decode("utf-8")
+        if userin.lower() == 'y':
+            # DV['stamina'] = Player.stamina_recovery(DV['stamina'], 'bed')
+            print('\n\n')
+            print(t.action_text.done_sleeping)
+        elif userin.lower() == 'n':
+            print('\n\n')
+
+    elif action_id == 'rubi_bed_interact':
+        print(expressions.e000)
+        input(interacting.i002)
+        print(expressions.e002)
+        input(interacting.i003)
+    else:  # Typical bed interaction
+        print(expressions.e000)
+        input(interacting.i011)
+
+
+def false(action_id: str) -> None:
+    """
+    Just prints, is all. For checks that don't need anything to be done.
+    """
+    print(t.action_text.run_into_solid)
+
+
+def table(action_id: str) -> None:
+    """
+    For interaction with tables
+    """
+    if action_id == 'home_table':
+        print(expressions.e000)
+        input(interacting.i004)
+        print(expressions.e002)
+        input(interacting.i005)
+        print(expressions.e003)
+        input(interacting.i006)
+    else:  # Typical table interaction
+        print(expressions.e000)
+        input(interacting.i010)
+
+
+def door(action_id: str) -> None:
+    """
+    For interaction with doors
+
+    WARNING: Hardcoded
+    """
+    if action_id == 'none':
+        pass
+    elif action_id == 'mithavil - home':
+        if DV['m_id'] == 0:
+            DV['m_id'], DV['Y'], DV['X'] = 1, 10, 9
+            JB.jam(LF['home'])
+        else:
+            DV['m_id'], DV['Y'], DV['X'] = 0, 9, 46
+            JB.jam(LF['mithavil'])
+    elif action_id == 'mithavil - ravia':
+        if DV['m_id'] == 0:
+            DV['m_id'], DV['Y'], DV['X'] = 2, 4, 1
+            JB.jam(LF['ravia'])
+        else:
+            DV['m_id'], DV['Y'], DV['X'] = 0, 20, 51
+            JB.jam(LF['mithavil'])
+    else:
+        pass
+
+
+def char(action_id: str) -> None:
+    """
+    For interaction with characters
+    """
+    if action_id == 'talk_john':
+        print(expressions.e000)
+        input(talking.t010)
+        print(John.expressions.e000)
+        input(John.talking.t000)
+        print(expressions.e005)
+        input(talking.t011)
+        print(John.expressions.e001)
+        input(John.talking.t001)
+    elif action_id == 'talk_rubi':
+        print(expressions.e000)
+        input(talking.t009)
+    elif action_id == 'talk_ravia':
+        print(Ravia.expressions.e000)
+        input(Ravia.talking.t000)
+        print(expressions.e000)
+        input(talking.t014)
+        print(Ravia.expressions.e001)
+        input(Ravia.talking.t006)
+        print(expressions.e000)
+        input(talking.t015)
+        print(Ravia.expressions.e000)
+        input(Ravia.talking.t007)
+        print(expressions.e000)
+        input(talking.t015)
+        print(Ravia.expressions.e002)
+        input(Ravia.talking.t007)
+        print(expressions.e000)
+        input(talking.t016)
+        print(Ravia.expressions.e001)
+        input(Ravia.talking.t008)
+    else:
+        pass
+
+
+def sign(action_id: str) -> None:
+    if action_id == 'mith_locan_news':
+        print(t.placeholder.placeholder_sign)
+    elif action_id == 'mith_direction':
+        print(t.placeholder.placeholder_sign)
+    else:  # Typical sign interaction
+        print(t.placeholder.placeholder_sign)
+
+
+def water(action_id: str) -> None:
+    # Generic water interaction for now. No, there's no witches.
+    print(expressions.e000)
+    input(interacting.i007)
+    print(expressions.e002)
+    input(interacting.i008)
+    print(expressions.e002)
+    input(interacting.i009)
 
 
 class apply_interactions:  # for applying interactions(usually outputs text)

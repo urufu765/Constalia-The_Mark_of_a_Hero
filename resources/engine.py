@@ -8,9 +8,11 @@ from resources.global_dic import map_class as mapz
 from resources.global_dic import legacy_visuals as visual_dic
 from resources.global_dic import pygame_variables as V
 from resources.global_dic import variables as DV
-from resources.global_dic import test_color_dic as CD
+from resources.global_dic import map_to_values as MD
+from resources.global_dic import test_color_dic_2 as CD
 from resources.global_dic import version as VER
 from resources.char import Player as p
+from resources import jukebox as JB
 from resources import char
 from assets import quests
 
@@ -19,6 +21,7 @@ Nyafim = False
 
 try:
     import pygame
+    from resources import mapper
 
     class Engineer:
         # window
@@ -35,6 +38,7 @@ try:
         __run_stat: bool
         __map_view: List[List[any]]  # Will convert to List[str] later
         __text_view: List[str]
+        __maps: Dict[int, mapper.Maps]
 
         ''' Some demo stuff first try and stuff idk
         def __init__(self):
@@ -72,15 +76,71 @@ try:
             self.__characters = []
             self.__run_stat = running
             self.__map_view = []
-
+            self.__maps = {
+                0: mapper.Mithavil(),
+                1: mapper.Home(),
+                2: mapper.Ravia_House()
+            }
+            # self.__map = M[DV['m_id']]()
             self.__text_view = []  # Separate window potentially
 
         def __crop_map(self) -> Tuple[int, int]:
+            """
+            Crops the map
+            Also attempts to match the map's size so it's more visually
+            pleasing.
+            Outputs offset: (y, x)
+            """
+            offset_y = DV['Y'] - (self.l_tiles - 1) // 2
+            offset_x = DV['X'] - (self.w_tiles - 1) // 2
+            # m = mapz[DV['m_id']].grid
+            m = self.__maps[DV['m_id']]
+
+            # y boundary checks
+            if self.l_tiles >= m.map_y + 5:
+                offset_y = 0 - ((self.l_tiles - m.map_y + 5) // 2)
+            else:
+                if offset_y < - 2:
+                    offset_y = - 2
+                elif self.l_tiles + offset_y > m.map_y + 3:
+                    offset_y = m.map_y + 3 - self.l_tiles
+
+            # x boundary checks
+            if self.w_tiles >= m.map_x + 5:
+                offset_x = 0 - ((self.w_tiles - m.map_x + 5) // 2)
+            else:
+                if offset_x < - 2:
+                    offset_x = - 2
+                elif self.w_tiles + offset_x > m.map_x + 3:
+                    offset_x = m.map_x + 3 - self.w_tiles
+
+            # cropping bit
+            self.__map_view = []
+            for y in range(offset_y, offset_y + self.l_tiles):
+                temp = []
+                for x in range(offset_x, offset_x + self.w_tiles):
+                    try:
+                        if x == DV['X'] and y == DV['Y']:
+                            temp.append('p')  # player
+                        elif x < 0 or y < 0:
+                            temp.append('o')
+                        else:
+                            temp.append(MD[m.grid[y][x]][0])
+                    except IndexError:
+                        temp.append('o')  # out of bounds
+                    except KeyError:
+                        temp.append(m.grid[y][x])
+                self.__map_view.append(temp)
+            return offset_y, offset_x
+
+        def __crop_map_x(self) -> Tuple[int, int]:
             """
             Crops the map from maps.py
             Also attempts to match the map's size so it's more visually
             pleasing.
             Outputs offset: (y, x)
+
+            Old code just in case I need to come back
             """
             offset_y = DV['Y'] - (self.l_tiles - 1) // 2
             offset_x = DV['X'] - (self.w_tiles - 1) // 2
@@ -136,6 +196,12 @@ try:
                         ))
             pygame.display.flip()
 
+        def get_value(self, y: int, x: int) -> str:
+            """
+            Returns the string at the specific coordinate
+            """
+            return self.__maps[DV['m_id']].grid[y][x]
+
         def new_game(self) -> None:
             """
             Initializes the game
@@ -143,6 +209,7 @@ try:
             pygame.display.set_caption(
                 f"Constalia: The Mark of a Hero [{VER['detailed']}]")
             self.screen = pygame.display.set_mode(self.size)
+            JB.jam(self.__maps[DV['m_id']].soundtrack)
             # self.background = pygame.image.load()  # note to self place this
             # in draw_main()
             # Insert initializing objects here

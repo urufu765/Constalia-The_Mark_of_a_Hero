@@ -8,3 +8,8 @@ There's no clear storyline I want to persue, or any main quest. Perhaps somethin
 
 
 Also keep in mind the releases may get flagged as malware, but this is just a false positive, the file is perfectly safe. If you can't run the executable, get the zip instead. The catch is you'll need Python version 3 to run it, which you can quickly obtain at python's official website.
+
+---
+
+## Update a.1.0 (check out the Changalog for full details):
+  Legacy mode has been made obsolete, which means legacy mode will no longer work from here on out *(legacy components will be removed slowly from this point)*. A new way for maps to be loaded has been made and bunch of things were changed to accomodate it. Mithavil has been redone. Music has been added to the game, enjoy the low quality mono track songs. Quests are also unavailable for now due to how maps work. The game is a little unstable at the moment due to many open ends. Also, the version type formatting has changed a little, now it's !->u->s->r, from least stable to most. The update is now visible in README. **And more...**

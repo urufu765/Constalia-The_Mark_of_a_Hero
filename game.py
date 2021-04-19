@@ -10,6 +10,7 @@ from resources.global_dic import variables as DV  # Global variables
 from resources.global_dic import pygame_variables as PV  # Pygame variables
 from resources.global_dic import solids as solid_dic  # Solid codes
 from resources.global_dic import map_class as mapz  # Map data
+from resources.global_dic import map_to_values as mtv
 from resources import saveloadmaster as saving  # Saving files
 from resources.char import Player as p  # Player
 from os import mkdir, path  # Saving
@@ -105,7 +106,7 @@ def player_exhausted() -> None:
     print(Firay.talking.t000)
 
 
-def event_manager(y: int, x: int) -> bool:
+def legacy_event_manager(y: int, x: int) -> bool:
     """
     Does action according to what the block_n is
     """
@@ -159,6 +160,30 @@ def legacy_input_handler(play_control: Dict[str, List[str]]) -> str:
     return p_input
 
 
+def event_manager(engi: engine.Engineer, y: int, x: int):
+    """
+    Does action according to what the block_n is and using a dictionary
+
+    TODO: Change code so it's not hard coded
+    """
+    lookup_event = {
+        's_wall': e.false,
+        's_water': e.false,
+        's_sand': e.false,
+        'o_table': e.table,
+        'o_bed': e.bed,
+        'o_door': e.door,
+        'c_generic': e.char,
+        'w': e.false
+    }
+    try:
+        value = mtv[engi.get_value(y, x)]
+        lookup_event[value[0]](value[2])
+        return value[3]
+    except KeyError:
+        return False
+
+
 def legacy_event_handler(
         play_move: str, play_control: Dict[str, List[str]]) -> bool:
     """
@@ -194,7 +219,7 @@ def legacy_event_handler(
     return True
 
 
-def event_handler() -> bool:
+def event_handler(engi: engine.Engineer) -> bool:
     """
     Applies the correct output using events and keypresses
     Default is WASD and arrows and will always be WASD and arrows
@@ -204,16 +229,16 @@ def event_handler() -> bool:
             return False
         elif event.type == pG.KEYDOWN:
             if event.key == pG.K_w or event.key == pG.K_UP:
-                if not event_manager(DV['Y'] - 1, DV['X']):
+                if not event_manager(engi, DV['Y'] - 1, DV['X']):
                     DV['Y'] -= 1
             elif event.key == pG.K_s or event.key == pG.K_DOWN:
-                if not event_manager(DV['Y'] + 1, DV['X']):
+                if not event_manager(engi, DV['Y'] + 1, DV['X']):
                     DV['Y'] += 1
             elif event.key == pG.K_a or event.key == pG.K_LEFT:
-                if not event_manager(DV['Y'], DV['X'] - 1):
+                if not event_manager(engi, DV['Y'], DV['X'] - 1):
                     DV['X'] -= 1
             elif event.key == pG.K_d or event.key == pG.K_RIGHT:
-                if not event_manager(DV['Y'], DV['X'] + 1):
+                if not event_manager(engi, DV['Y'], DV['X'] + 1):
                     DV['X'] += 1
             elif event.key == pG.K_q:
                 pass  # quest output
@@ -239,7 +264,7 @@ if __name__ == '__main__':
         if not LEGACY:
             main_game.draw_main()  # unbound but that's okay
             pG.time.wait(1000//PV['FPS'])
-            GAME = event_handler()
+            GAME = event_handler(main_game)
 
         else:
             engine.legacy_graphics_engine(DV['m_id'], [DV['Y'], DV['X']])
