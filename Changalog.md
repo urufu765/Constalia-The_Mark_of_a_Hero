@@ -108,6 +108,8 @@
 
    **(a.1.1)** Anything duplicated is now gone *(most legacy, some recent)*, new folders, and replaced audio with different sounds (and smaller files). Changed some code to accomodate for new textures stuff. Oh and also one new texture: the wall.
 
+   **(a.1.1.1)** Forgot to update README.md
+
 ---
 
 ## Upcoming:
