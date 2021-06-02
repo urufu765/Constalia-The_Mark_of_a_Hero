@@ -2,8 +2,6 @@
 Contains everything regarding variables
 THIS IS ONE WAY, AND SHOULDN'T IMPORT ANYTHING!!!
 """
-from assets import maps as m
-
 # Note to self: DON'T FORGET TO UPDATE THIS YOU FORGETFUL IDIOT!
 # Also never call these versions directly, they're for internal use only
 v_long = 'Version alpha'
@@ -30,68 +28,57 @@ variables = {
     'stamina': 20,
     }
 
-# Collision codes
-solids = {
-    'Mithavil': [2, 3, 5, 6, 7, 8, 9],
-    'Mithavil Interior': [1, 2, 3, 4, 5, 8, 9]
-    }
-
-# Map class lookup table
-map_class = {
-    0: m.Mithavil,
-    1: m.Home,
-    2: m.Raviahouse
-    }
-
-# Generating graphics(legacy)
-legacy_visuals = {
-    'outtaboundz': "▒",
-    'Mithavil': [' ', '҈', '■', '⌠', '▓', 'ﬕ', '‼', '□', 'Ξ', '█'],
-    'Mithavil Interior': ['░', 'C', '▒', '╬', '┃', '━', '│', '─', 'Ξ', '█']
-    }
-
 pygame_variables = {
     'tile_size': 50,
     'FPS': 5
 }
 
 LOOP_FILES = {
-    0: './assets/audio/11_pretty_placeholder.ogg',
-    'title': './assets/audio/14_constalian_chronicles.ogg',
-    'home': './assets/audio/07_heavenly_home.ogg',
-    'mithavil': './assets/audio/02_morning_mithavil.ogg',
-    'ravia': './assets/audio/06_rapturous_ravia.ogg',
+    0: './assets/audio/pretty_placeholder.ogg',
+    # 'title': './assets/audio/constalian_chronicles.ogg',  # TODO
+    'home': './assets/audio/heavenly_home.ogg',
+    'mithavil': './assets/audio/morning_mithavil.ogg',
+    'ravia': './assets/audio/rapturous_ravia.ogg',
 }
 
-test_color_dic = {  # for testing only
-    'p': (255, 0, 0),  # player
-    0: (110, 110, 110),
-    1: (0, 255, 0),
-    8: (255, 180, 180),
-    2: (0, 0, 255),
-    3: (0, 0, 255),
-    4: (90, 90, 255),
-    5: (90, 90, 255),
-    6: (90, 90, 255),
-    7: (90, 90, 255),
-    9: (70, 70, 70),
-    'w': (255, 255, 255),  # white
-    'o': (0, 0, 0),  # outtaboundz
-}
+# TODO: Make Textures
+TEXTURE_FILES = {
+    'p': [],  # player
+    '0': [],  # generic
+    't_grass': [],  # grass texture
+    't_tree': [],  # trees texture
+    't_wood_floor': [],  # wooden floor texture
+    't_water': [],  # generic water
+    't_sand': [],  # generic sand
+    't_wall': ['./assets/textures/wall.gif'],  # generic wall
+    't_bridge': [],  # generic bridge
+    'c_generic': [],  # generic character (empty only)
+    'c_rubi': [],
+    'c_john': [],
+    'c_ravia': [],
+    'o_table': [],  # generic table
+    'o_bed': [],  # generic bed
+    'o_door': [],  # generic door
+    'o': [],  # out of bounds
+    'w': []  # white... what does this do?
+}  # TODO in the future:
+# make multiple textures so whenever map is initially generated the random
+# textures make the visuals more diverse. (e.g. 't_grass': ['1.gif', '2.gif'])
 
-# TODO: Make sprites
 test_color_dic_2 = {  # for testing only
     'p': (255, 0, 0),  # player
     '0': (110, 110, 110),
+    't_grass': (70, 180, 60),  # grass
+    't_tree': (0, 100, 0),  # trees
     'c_generic': (0, 255, 0),
     # 'home_exit': (255, 180, 180),
     'o_bed': (0, 0, 255),
     'o_table': (0, 0, 255),
-    's_water': (90, 90, 200),
-    's_sand': (255, 255, 0),
+    't_water': (90, 90, 200),
+    't_sand': (255, 255, 0),
     'o_door': (90, 90, 255),
-    's_wall': (70, 70, 70),
-    's_bridge': (150, 75, 0),
+    't_wall': (70, 70, 70),
+    't_bridge': (150, 75, 0),
     'w': (255, 255, 255),  # white
     'o': (0, 0, 0),  # outtaboundz
 }
@@ -102,25 +89,27 @@ map_to_values = {  # TODO: overhaul 'type' to match sprites (current: colors)
     'id': ['type', False, 'action_id', False],  # example
     # Type can be s for structure, c for character, o for object, i for item
     # in general:
-    'wall': ['s_wall', True, 'none', True],
-    'tree': ['s_wall', True, 'none', True],  # TODO: tree, not wall
+    'wall': ['t_wall', True, 'none', True],
+    'tree': ['t_tree', True, 'none', True],
     # TODO: For river and ocean, change dialogue and make passable for river
-    'river': ['s_water', True, 'no swim', True],
-    'ocean': ['s_water', True, 'no swim', True],
-    'sand': ['s_sand', True, 'none', True],  # TODO: add beach to mithavil
-    'house': ['s_wall', True, 'none', True],
+    'river': ['t_water', True, 'no swim', True],
+    'ocean': ['t_water', True, 'no swim', True],
+    'sand': ['t_sand', True, 'none', True],  # TODO: add beach to mithavil
+    'house': ['t_wall', True, 'none', True],
     'path': ['w', False, 'none', False],
 
     # Mithavil
-    'farm': ['s_sand', True, 'none', False],  # TODO: give others farms
-    'bridge': ['s_bridge', True, 'none', False],
-    'town hall': ['s_wall', True, 'none', True],  # TODO
+    'grass': ['t_grass', True, 'none', False],
+    'farm': ['t_sand', True, 'none', False],  # TODO: give others farms
+    'bridge': ['t_bridge', True, 'none', False],
+    'town hall': ['t_wall', True, 'none', True],  # TODO
     'market': ['o', False, 'none', False],  # TODO
     'west exit': ['w', True, 'none', True],
     'east exit': ['w', True, 'none', True],
 
 
     # Home (TODO: Fix the underscore stuff and put arrows)
+    'floor_wood': ['0', True, 'none', False],
     'home gate': ['o_door', True, 'mithavil - home', True],
     'rubi': ['c_generic', True, 'talk_rubi', True],
     'john': ['c_generic', True, 'talk_john', True],

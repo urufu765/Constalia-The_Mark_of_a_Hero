@@ -90,7 +90,9 @@ class Mithavil(Maps):
         """
         super().__init__(
             0, "Mithavil", 30, 57, {
-
+                'grass': [
+                    [0, 0, 30, 57]
+                ],
                 # Generics
                 'tree': [
                     [0, 0, 0, 57],
@@ -209,6 +211,9 @@ class Home(Maps):
         """
         super().__init__(
             1, "Home", 11, 11, {
+                'floor_wood': [
+                    [0, 0, 11, 11]
+                ],
                 'wall': [
                     [0, 0, 11, 0],
                     [0, 1, 0, 10],
@@ -220,6 +225,7 @@ class Home(Maps):
                     [6, 6, 0, 4],
                     [11, 1, 0, 7],
                     [11, 10, 0, 0]],
+                # TODO: don't hardcode characters in map
                 'rubi': [[8, 5, 0, 0]],
                 'john': [[10, 7, 0, 0]],
                 'home_table': [[8, 2, 1, 2]],
@@ -258,6 +264,9 @@ class Ravia_House(Maps):
         super().__init__(
             2, "Ravia's House", 11, 12, {
                 # TODO: Check with other python versions for dict ordering
+                'floor_wood': [
+                    [0, 0, 11, 12]
+                ],
                 'wall': [
                     [0, 0, 0, 12],
                     [1, 0, 10, 0],

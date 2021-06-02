@@ -1,43 +1,39 @@
 # Changalog
-### Update a.1.0 *[Mechanics & Assets Alpha]*
-  Legacy mode has been made obsolete, which means legacy mode will no longer work from here on out *(legacy components will be removed slowly from this point)*. A new way for maps to be loaded has been made and bunch of things were changed to accomodate it. Mithavil has been redone. Music has been added to the game, enjoy the low quality mono track songs. Quests are also unavailable for now due to how maps work. The game is a little unstable at the moment due to many open ends. Also, the version type formatting has changed a little, now it's !->u->s->r, from least stable to most. The update is now visible in README. **And more...**
+### Update a.1.1 *[Mechanics & Assets Alpha]*
+  Anything duplicated is now gone *(most legacy, some recent)*, new folders, and replaced audio with different sounds (and smaller files). Changed some code to accomodate for new textures stuff. Oh and also one new texture: the wall.
 
   - ./
-    - alpha_tester.py
-      - This was bound to happen. This basically allows me (and any devs who want to work on this project) to test out functions and files that require root-level imports since they're defined as such.
-      - Unless you want to help with the project don't worry about this new addition.
-    - Changalog.md
-      - Changed how it looks... again.
-      - I just can't be satisfied with how it looks for some reason.
-    - README.md
-      - Updates are now copied and pasted to README for increased visibility
+    - game.py
+      - Cleaned up imports (removed legacy & stuff)
+      - Deleted a bunch of code that belonged to legacy
+    - maps.py
+      - Gone.
+  - ./assets/portraits/
+    - Here's where the portraits of the characters will be located, it will be **something**x**something** (haven't decided)
   - ./assets/audio/
     - Replaced the tracks with smaller ones *(except for track 14, which isn't used and probably won't be used for a while so away it goes)*
+  - ./assets/textures/
+    - Here's where the textures will be located, it will be **something**x**something** (maybe 50x50)
+    - Also a texture was added as a test, and it works.
   - ./resources/
     - engine.py
-      - Added import for `map_to_value` and `jukebox`
-      - changed color lookup import from `test_color_dic` to `test_color_dic_2` *(yes I know, I'm so creative)*
-      - Added `mapper` import inside safety net, though it's probably redundant and `jukebox` will be the one causing problems
-      - Added new attribute `__maps` for `Engineer` that initializes and stores the maps
-      - Altered `__crop_map()` to depend more on the map object attributes rather than calculating the length over and over again. The old version is kept for now as `__crop_map_x()` but will likely be removed soon
-      - Added `get_value()` function
-      - Added jukebox soundtrack startup in `new_game()`
+      - Cleaned up imports
+      - Added new import for Texture Files
+      - Deleted legacy junk
+      - Safely added texture rendering thing (if texture doesn't exist, resort to barbaric colors)
     - eventulate.py
-      - Added import for music file destionation lookup and `jukebox`
-      - Readded the event definitions, though `door()` is the only one that has received changes.
+      - removed legacy methods of checking.
     - global_dic.py
-      - Changed how version type formatting works
-      - Updated starting coordinates to reflect map changes
-      - Lowered FPS: `15` -> `5`
-      - Added lookup dictionary for music files
-      - Added lookup dictionary for colors
-      - Added lookup dictionary for values in map
+      - Finally, global_dic is free from imports (it should never import anything)
+      - Legacy things went bye bye
+      - Updated music file dictionary to match track names better
+      - Removed legacy color dictionary, added brand-spankin'-new texture files dictionary.
+      - Changed some map key names.
     - jukebox.py
-      - Added dedicated file for playing sounds. It'll soon also do sound fx
+      - not much here, just placed a TODO to do some error checking just in case.
     - mapper.py
-      - New map file that uses keys rather than hard coded arrays for easier map generation and coding.
-      - The two existing house maps have been slightly altered by reducing the 'gutter' and by moving the exit
-      - Mithavil has been overhauled to more closely match a map I made in a website quite some time ago. It's a whole lot larger too, since the plan to have North and South Mithavils has been canceled.
+      - Added grass to one of the maps. Now the ground of Mithavil is propery green rather than grey.
+      - Some edits here and there, and a TODO to remind myself to remove the hard-coded character drawing coordinates.
 
 ---
 
@@ -109,6 +105,8 @@
    **(a.1.0.1)** Hotfix: changed how Changalog looks again
 
    **(a.1.0.2)** Another one where Changalog is changed a little
+
+   **(a.1.1)** Anything duplicated is now gone *(most legacy, some recent)*, new folders, and replaced audio with different sounds (and smaller files). Changed some code to accomodate for new textures stuff. Oh and also one new texture: the wall.
 
 ---
 
