@@ -11,7 +11,7 @@ from resources.global_dic import map_to_values as mtv
 from resources import saveloadmaster as saving  # Saving files
 from resources.char import Player as p  # Player
 from os import mkdir, path  # Saving
-import resources.eventulate as e  # Event manager
+from resources.eventulate import temp_i as e  # Event manager
 from chars import Firay  # Firay text
 import pygame as pG
 
@@ -86,12 +86,12 @@ def event_manager(engi: engine.Engineer, y: int, x: int):
         'o_table': e.table,
         'o_bed': e.bed,
         'o_door': e.door,
-        'c_generic': e.char,
+        'c_generic': e.character,
         'w': e.false
     }
     try:
         value = mtv[engi.get_value(y, x)]
-        lookup_event[value[0]](value[2])
+        lookup_event[value[0]](engi, value[2])
         print(value[3])
         return value[3]
     except KeyError:
@@ -108,24 +108,33 @@ def event_handler(engi: engine.Engineer) -> bool:
         if event.type == pG.QUIT:
             return False
         elif event.type == pG.KEYDOWN:
-            if event.key == pG.K_w or event.key == pG.K_UP:
-                if not event_manager(engi, DV['Y'] - 1, DV['X']):
-                    DV['Y'] -= 1
-            elif event.key == pG.K_s or event.key == pG.K_DOWN:
-                if not event_manager(engi, DV['Y'] + 1, DV['X']):
-                    DV['Y'] += 1
-            elif event.key == pG.K_a or event.key == pG.K_LEFT:
-                if not event_manager(engi, DV['Y'], DV['X'] - 1):
-                    DV['X'] -= 1
-            elif event.key == pG.K_d or event.key == pG.K_RIGHT:
-                if not event_manager(engi, DV['Y'], DV['X'] + 1):
-                    DV['X'] += 1
+            if DV['is_talking']:
+                if event.key == pG.K_RETURN:
+                    if engi.get_i() + 1 >= engi.get_l() - 1:
+                        engi.reset_text()
+                        DV['is_talking'] = False
+                    else:
+                        engi.cue_text()
+                        engi.cue_text()
             elif event.key == pG.K_q:
                 pass  # quest output
             elif event.key == pG.K_z:
                 pass  # save
             elif event.key == pG.K_x:
                 pass  # load
+            else:
+                if event.key == pG.K_w or event.key == pG.K_UP:
+                    if not event_manager(engi, DV['Y'] - 1, DV['X']):
+                        DV['Y'] -= 1
+                elif event.key == pG.K_s or event.key == pG.K_DOWN:
+                    if not event_manager(engi, DV['Y'] + 1, DV['X']):
+                        DV['Y'] += 1
+                elif event.key == pG.K_a or event.key == pG.K_LEFT:
+                    if not event_manager(engi, DV['Y'], DV['X'] - 1):
+                        DV['X'] -= 1
+                elif event.key == pG.K_d or event.key == pG.K_RIGHT:
+                    if not event_manager(engi, DV['Y'], DV['X'] + 1):
+                        DV['X'] += 1
     return True
 
 
@@ -133,6 +142,7 @@ def event_handler(engi: engine.Engineer) -> bool:
 if __name__ == '__main__':
     startup_folder_creations()
     play_control = c.control_schemes[3]  # WASD default
+    pG.init()
     main_game = engine.Engineer(True)
     main_game.new_game()
     while GAME:

@@ -7,7 +7,7 @@ THIS IS ONE WAY, AND SHOULDN'T IMPORT ANYTHING!!!
 v_long = 'Version alpha'
 v_short = 'a'
 v_major = '1'
-v_minor = '0'
+v_minor = '2'
 v_hotfx = '0'
 v_stype = 'u'  # ! = raw, u = unstable, s = stable, r = release
 v_ltype = 'unstable'
@@ -26,11 +26,32 @@ variables = {
     'X': 8,
     'm_id': 1,
     'stamina': 20,
+    'is_talking': False,
     }
 
 pygame_variables = {
     'tile_size': 50,
     'FPS': 5
+}
+
+# Storing speaking texts. First value is ALWAYS the index
+# Also speech always follows Face(index n), Text(index n*2)
+speech = [0]  # Important: RESET INDEX AND EMPTY AFTER EVERY CONVERSATION
+
+
+# When extending text, use the mid line. MAX NUMBER OF LINES IS 5 BEFORE
+# IT SHOULD BE PASSED ONTO THE NEXT BOX. THE BOX SIZE IS NOT CHANGED UNTIL
+# A CHARACTER SWITCH.
+SPEECH_BOX = {
+    'narrator': 'invalid',
+    'main_sta': "╠═════╩════════════════════════════════╣",
+    'main_mid': "║ %s ║",
+    'main_con': "╚════════════════╡....╞════════════════╝",
+    'main_end': "╚═════╡Press Enter to Continue...╞═════╝",
+    'side_sta': "├─────┴────────────────────────────────┤",
+    'side_mid': "│ %s │",
+    'side_con': "└────────────────┤....├────────────────┘",
+    'side_end': "└─────┤Press Enter to Continue...├─────┘"
 }
 
 LOOP_FILES = {
@@ -121,8 +142,8 @@ map_to_values = {  # TODO: overhaul 'type' to match sprites (current: colors)
 
     # Ravia's house
     'ravia gate': ['o_door', True, 'mithavil - ravia', True],
-    'ravia': ['c_generic', True, 'talk ravia', True],
-    'ravia table': ['o_table', True, 'ravia table interact', True],
+    'ravia': ['c_generic', True, 'talk_ravia', True],
+    'ravia table': ['o_table', True, 'ravia_table_interact', True],
     'ravia desk': ['o_table', True, 'none', True],  # unreachable
     'ravia bed': ['o_bed', True, 'none', True],  # unreachable
     'ravia door': ['o_door', True, 'none', True],  # locked

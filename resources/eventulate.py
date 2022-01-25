@@ -6,6 +6,7 @@ from resources.global_dic import variables as DV
 from resources.global_dic import doors
 from resources.global_dic import interactables as i
 from resources.global_dic import LOOP_FILES as LF
+from resources.engine import Engineer
 from resources import jukebox as JB
 from assets.quests import run_quest
 from resources.char import Player
@@ -151,6 +152,77 @@ def water(action_id: str) -> None:
     print(expressions.e002)
     input(interacting.i009)
 
+class temp_i(Engineer):
+    """
+    Temporary class that contains text interactions.
+    Used for slowly converting the command line output stuff to pygame stuff
+    """
+    def door(self, id: str) -> None:
+        pass  # reserved for jukebox
+    # TODO  change how text is handled fundamentally
+    def bed(self, id: str) -> None:
+        if id == 'firay_bed_interact':
+            print("firay bed triggered")
+            self.add_text(
+                expressions.e000, interacting.i001)
+            '''
+            speech.append(expressions.e000)
+            speech.append(interacting.i001)
+            '''
+        elif id == 'rubi_bed_interact':
+            print("rubi bed triggered")
+            self.add_text(
+                expressions.e000, interacting.i002,
+                expressions.e002, interacting.i003)
+        else:  # Typical bed interaction
+            self.add_text(
+                expressions.e000, interacting.i011)
+        DV['is_talking'] = True
+        self.cue_text()
+
+    def table(self, id: str) -> None:
+        if id == 'home_table':
+            self.add_text(
+                expressions.e000, interacting.i004,
+                expressions.e002, interacting.i005, 
+                expressions.e003, interacting.i006)
+        else:  # Typical table interaction
+            self.add_text(
+                expressions.e000, interacting.i010)
+        DV['is_talking'] = True
+        self.cue_text()
+
+    def character(self, id: str) -> None:  # all typical interactions
+        if id == 'talk_john':
+            print("john triggered")
+            self.add_text(
+                expressions.e000, talking.t010,
+                John.expressions.e000, John.talking.t000,
+                expressions.e005, talking.t011,
+                John.expressions.e001, John.talking.t001)
+        elif id == 'talk_rubi':
+            print("rubi triggered")
+            self.add_text(
+                expressions.e000, talking.t009)
+        elif id == 'talk_ravia':
+            print("ravia triggered")
+            self.add_text(
+                Ravia.expressions.e000, Ravia.talking.t000,
+                expressions.e000, talking.t014,
+                Ravia.expressions.e001, Ravia.talking.t006,
+                expressions.e000, talking.t015,
+                Ravia.expressions.e000, Ravia.talking.t007,
+                expressions.e000, talking.t015,
+                Ravia.expressions.e002, Ravia.talking.t007,
+                expressions.e000, talking.t016,
+                Ravia.expressions.e001, Ravia.talking.t008)
+        else:
+            return
+        DV['is_talking'] = True
+        self.cue_text()
+
+    def false(self, id: str) -> None:
+        print(t.action_text.run_into_solid)
 
 class apply_interactions:  # for applying interactions(usually outputs text)
     def door(id: str) -> None:

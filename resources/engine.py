@@ -10,11 +10,13 @@ from resources.global_dic import map_to_values as MD
 from resources.global_dic import TEXTURE_FILES as TF
 from resources.global_dic import test_color_dic_2 as CD
 from resources.global_dic import version as VER
+from resources.global_dic import SPEECH_BOX as SB
 from resources.char import Player as p
 from resources import jukebox as JB
 from resources import char
 from assets import quests
 import pygame
+import pygame.freetype
 from resources import mapper
 
 # Debugger
@@ -27,6 +29,7 @@ class Engineer:
     width: int
     height: int
     screen: Optional[pygame.Surface]
+    text_mac: pygame.freetype.Font  # 'short' for Text machine
     w_tiles: int
     l_tiles: int
     tiles_number: Tuple[int, int]
@@ -35,7 +38,7 @@ class Engineer:
     __characters: List[char.Characters]
     __run_stat: bool
     __map_view: List[List[any]]  # Will convert to List[str] later
-    __text_view: List[str]
+    __text_view: List[any]  # See the function it's used in to know how to use
     __maps: Dict[int, mapper.Maps]
 
     ''' Some demo stuff first try and stuff idk
@@ -80,7 +83,15 @@ class Engineer:
             2: mapper.Ravia_House()
         }
         # self.__map = M[DV['m_id']]()
-        self.__text_view = []  # Separate window potentially
+        self.text_mac = pygame.freetype.Font(
+            'assets/font/CONSOLA.TTF', (V['tile_size']*2.1)/5)
+        self.text_mac.pad = True
+        self.text_mac.antialiased = False
+        self.text_mac.origin = False
+
+        # Storing speaking texts. First value is ALWAYS the index
+        # Also __text_view always follows Face(index n), Text(index n*2)
+        self.__text_view = [0]  # Important: RESET INDEX AND EMPTY AFTER EVERY CONVERSATION
 
     def __crop_map(self) -> Tuple[int, int]:
         """
@@ -156,7 +167,206 @@ class Engineer:
                             y * V['tile_size'],
                             V['tile_size'], V['tile_size']
                         ))
+        if DV['is_talking']:
+            self.draw_text()
         pygame.display.flip()
+
+    def reset_text(self) -> None:
+        """
+        Resets the text storage for next interaction
+        """
+        self.__text_view = [0]
+
+    def adt_text(
+            self, protagonist: bool, speech: List[str], lines=0, cont=False):
+        """
+        Simpler version of set text. Both versions are unused atm
+        """
+        line_num = lines
+        if line_num == 0:
+            if len(speech) <= 5:
+                line_num = len(speech)
+            else:
+                line_num = len(speech) // 5
+        for i, line in enumerate(speech):
+            if (i % line_num) == 0:
+                self.__text_view.append([
+                    'main_sta' if protagonist else 'side_sta', ])
+            self.__text_view.append([
+                'main_mid' if protagonist else 'side_mid',
+                SB['main_mid' if protagonist else 'side_mid'] 
+                % (line + (' ' * (36 - len(line))))
+            ])
+            if (i % line_num) == 0:
+                if (len(speech) - i) > line_num or cont:
+                    self.__text_view.append([
+                        'main_con' if protagonist else 'side_con', None])
+                else:
+                    self.__text_view.append([
+                        'main_end' if protagonist else 'side_end', None])
+
+
+    def set_text(self, protagonist: bool, speech: str, lines=0, cont=False) -> int:
+        """
+        Adds the text to the text storage. Takes whether it's the
+        protagonist speaking or not and their speech as the argument.
+        Third parameter is for forcing a certain number of lines. Otherwise
+        it's automatically calculated.
+        Fourth parameter is for clarifying whether to just have continuing
+        speech boxes.
+        Outputs box height.
+        """
+        '''How it works (internally):
+        The way the speech is placed in follows some rules:
+        1. Each line must be at most 36 characters long.
+        2. Each box is at most 5 lines big, and the size does
+            not switch until it's the next character talking
+        3. The talk box is formatted as follows:
+            0: index {used for checking which interaction to show}
+            1: [top text border id, number of lines]
+            2: [mid text border id, line {preformated}]
+            ...
+            3~: [end text border, null] {haven't found use yet for null}
+            ~?: character art {kept as legacy, will change later}
+        '''
+        line_num = lines
+
+        # Takes care of converting one big string into a wall of text
+        word_list = speech.split(" ")
+        word_line = []
+        while len(word_list) > 0:
+            box = True
+            temp = ''
+            while box and len(word_list) > 0:
+                if len(temp + ' ' + word_list[0]) < 36:
+                    temp += ' ' + word_list.pop(0)
+                else:
+                    box = False
+            word_line.append(temp)
+
+        # calculates the number of lines it should use
+        if line_num == 0:
+            if len(word_line) <= 5:
+                line_num = len(word_line)
+            else:
+                line_num = len(word_line) // 5
+        for i, line in enumerate(word_line):
+            if (i % line_num) == 0:
+                self.__text_view.append([
+                    'main_sta' if protagonist else 'side_sta', line_num])
+            self.__text_view.append([
+                'main_mid' if protagonist else 'side_mid',
+                SB['main_mid' if protagonist else 'side_mid'] 
+                % (line + (' ' * (36 - len(line))))
+            ])
+            if (i % line_num) == 0:
+                if (len(word_line) - i) > line_num or cont:
+                    self.__text_view.append([
+                        'main_con' if protagonist else 'side_con', None])
+                else:
+                    self.__text_view.append([
+                        'main_end' if protagonist else 'side_end', None])
+        return line_num
+
+    def add_text(self, *args):
+        """
+        A legacy way of adding text, nothing fancy here
+        """
+        for text in args:
+            self.__text_view.append(text)
+    
+    def cue_text(self):
+        """
+        Cue up text to be displayed.
+        """
+        self.__text_view[0] += 1
+
+    def get_i(self):
+        """
+        Gets the index of the current text
+        """
+        return self.__text_view[0]
+
+    def get_l(self):
+        """
+        Gets the length of the text
+        """
+        return len(self.__text_view)
+
+    def draw_text(self) -> None:
+        """
+        Draws the text on the screen
+        Perhaps use freetype instead of font
+        """
+        temp_lines = self.__text_view[self.__text_view[0]].split('\n')
+        if Nyafim: self.debug_text()
+        for index, line in enumerate(
+                self.__text_view[self.__text_view[0] + 1].split('\n')):
+            if Nyafim:
+                print("index:", index, "line:", temp_lines[index+1])
+                print("index:", index, "line:", line)
+            self.screen.blit(self.text_mac.render(
+                    temp_lines[index+1],(255,255,255),(0,0,0))[0],
+                (((self.w_tiles/2) - 5) * V['tile_size'],
+                (self.l_tiles - (5 - (0.5 * index))) * V['tile_size']))
+            self.screen.blit(self.text_mac.render(
+                    line,(255,255,255),(0,0,0))[0],
+                (((self.w_tiles/2) - 5) * V['tile_size'],
+                (self.l_tiles - (2.5 - (0.5 * index))) * V['tile_size']))
+
+
+
+        '''
+        # Top half box
+        self.screen.fill(
+            CD['o'],
+            pygame.Rect(
+                ((self.w_tiles/2)-5) * V['tile_size'],
+                (self.l_tiles-5) * V['tile_size'],
+                1.75 * V['tile_size'], 1.5 * V['tile_size']
+            )
+        )
+        # Bottom half box
+        self.screen.fill(
+            CD['o'],
+            pygame.Rect(
+                ((self.w_tiles/2)-5) * V['tile_size'],
+                (self.l_tiles-3.5) * V['tile_size'],
+                10 * V['tile_size'], 3.5 * V['tile_size']
+            )
+        )
+        # Text TODO optimize if possible by only rendering the text once
+        temp_lines = self.__text_view[self.__text_view[0]].split('\n')
+        for index, line in enumerate(
+                self.__text_view[self.__text_view[0] * 2].split('\n')):
+            self.screen.blit(self.text_mac.render(
+                    temp_lines[index+1],(255,255,255))[0],
+                (((self.w_tiles/2) - 5) * V['tile_size'],
+                (self.l_tiles - (5 - (0.5 * index))) * V['tile_size']))
+            self.screen.blit(self.text_mac.render(
+                    line,(255,255,255))[0],
+                (((self.w_tiles/2) - 5) * V['tile_size'],
+                (self.l_tiles - (2.5 - (0.5 * index))) * V['tile_size']))
+        
+        self.__text_view.render_to(self.screen,
+            (((self.w_tiles/2)-5) * V['tile_size'],
+            (self.l_tiles-5) * V['tile_size']),
+            (S[S[0]] + "\n" + S[S[0] * 2]), (255,255,255))
+        # self.screen.blit(self.__text_view.render(
+        #     (S[S[0]] + "\n" + S[S[0] * 2]), (255,255,255)),
+        #     (((self.w_tiles/2)-5) * V['tile_size'],
+        #     (self.l_tiles-5) * V['tile_size']))
+        '''
+
+    def debug_text(self):
+        """
+        For debugging text (with out of range stuff) purposes
+        """
+        for x in self.__text_view:
+            print("-", x)
+        for y in self.text_mac.get_sizes():
+            print("+", y)
+        print(self.text_mac.get_sized_height())
 
     def get_value(self, y: int, x: int) -> str:
         """

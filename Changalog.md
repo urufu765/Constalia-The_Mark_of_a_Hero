@@ -1,39 +1,55 @@
 # Changalog
-### Update a.1.1 *[Mechanics & Assets Alpha]*
-  Anything duplicated is now gone *(most legacy, some recent)*, new folders, and replaced audio with different sounds (and smaller files). Changed some code to accomodate for new textures stuff. Oh and also one new texture: the wall.
+### Update a.1.2 *[Mechanics & Assets Alpha]*
+  Text engine is up, so talking to things (tables and people) actually shows up on screen!
+  But unfortunately, due to how it was implemented, you can't go outside anymore. Fix will come later.
 
   - ./
     - game.py
-      - Cleaned up imports (removed legacy & stuff)
-      - Deleted a bunch of code that belonged to legacy
-    - maps.py
-      - Gone.
-  - ./assets/portraits/
-    - Here's where the portraits of the characters will be located, it will be **something**x**something** (haven't decided)
-  - ./assets/audio/
-    - Replaced the tracks with smaller ones *(except for track 14, which isn't used and probably won't be used for a while so away it goes)*
-  - ./assets/textures/
-    - Here's where the textures will be located, it will be **something**x**something** (maybe 50x50)
-    - Also a texture was added as a test, and it works.
+      - Changed import to temporary interaction class (will rename later)
+      - event_manager()
+        - Fixed function alias for character in dictionary
+        - Updated function call to accomodate the new way the events are called
+      - event_handler()
+        - New set of code to deal with talking to things
+        - moved event keys for quest, save and load (for future reference)
+      - Pygame initializer added to main body
+  - ./assets/font/
+    - CONSOLA.TTF
+      - Added.
   - ./resources/
     - engine.py
-      - Cleaned up imports
-      - Added new import for Texture Files
-      - Deleted legacy junk
-      - Safely added texture rendering thing (if texture doesn't exist, resort to barbaric colors)
+      - Added imports for pygame freetype and SPEECH_BOX(unused for now)
+      - text_mac added to store the object for text, __text_view added for storing text temporarily
+      - initializer edited to accomodate.
+      - draw_main()
+        - added condition where it draws text on top of whatever was drawn
+      - reset_text()
+        - new method for resetting text (clearing temp storage)
+      - adt_text()
+        - new unused complicated method undescribed for now as it'll probably be redone
+      - set_text()
+        - new unused complicated method undescribed for now as it'll probably be redone
+      - add_text()
+        - new method for adding text to temp storage, uses variable amount of variables thing
+      - cue_text()
+        - new method for progressing index
+      - get_i()
+        - new method for getting the index of temp storage
+      - get_l()
+        - new method for getting the length of temp storage
+      - draw_text()
+        - text engine that draws the text
+      - debug_text()
+        - Nyafim's, don't touch! Obviously for debugging
     - eventulate.py
-      - removed legacy methods of checking.
+      - now imports engineer to access the public methods
+      - whoe new class that deals with passing text into the temp storage and stuff. Will become the main event handler as time goes on
     - global_dic.py
-      - Finally, global_dic is free from imports (it should never import anything)
-      - Legacy things went bye bye
-      - Updated music file dictionary to match track names better
-      - Removed legacy color dictionary, added brand-spankin'-new texture files dictionary.
-      - Changed some map key names.
-    - jukebox.py
-      - not much here, just placed a TODO to do some error checking just in case.
-    - mapper.py
-      - Added grass to one of the maps. Now the ground of Mithavil is propery green rather than grey.
-      - Some edits here and there, and a TODO to remind myself to remove the hard-coded character drawing coordinates.
+      - I keep forgetting to change the version number.
+      - added a new main variable to tell the program if the player is talking or not
+      - added speech storage that may be removed due to the function being passed onto the engineer
+      - speech box that contains the general text lines (for future reference)
+      - map_to_values edited to make it more compliant (may go more changes)
 
 ---
 
@@ -109,6 +125,8 @@
    **(a.1.1)** Anything duplicated is now gone *(most legacy, some recent)*, new folders, and replaced audio with different sounds (and smaller files). Changed some code to accomodate for new textures stuff. Oh and also one new texture: the wall.
 
    **(a.1.1.1)** Forgot to update README.md
+
+   **(a.1.2)** Text engine is up, so talking to things (tables and people) actually shows up on screen! But unfortunately, due to how it was implemented, you can't go outside anymore. Fix will come later.
 
 ---
 
